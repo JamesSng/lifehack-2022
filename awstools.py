@@ -211,12 +211,20 @@ def addEventToVolunteer(username, eventid):
     if eventid not in userinfo['events']:
         userinfo['events'].append(eventid)
     updateVolunteerInfo(username, userinfo)
+    eventinfo = getEventInfo(eventid)
+    if username not in eventinfo['participants']:
+        eventinfo['participants'].append(username)
+    updateEventInfo(eventid, eventinfo)
 
 def removeEventFromVolunteer(username, eventid):
     userinfo = getVolunteerInfo(username)
     if eventid in userinfo['events']:
         userinfo['events'].remove(eventid)
     updateVolunteerInfo(username, userinfo)
+    eventinfo = getEventInfo(eventid)
+    if username in eventinfo['participants']:
+        eventinfo['participants'].remove(username)
+    updateEventInfo(eventid, eventinfo)
 
 def addEventToOrganiser(organiserid, eventid):
     userinfo = getOrganiserInfo(organiserid)
@@ -283,5 +291,37 @@ def getVolunteeringHours(username):
         writer.writerow([key, value])
     file.close()
 
+def processAnalytics(eventids):
+    userids = []
+    for event in eventids:
+        eventinfo = getEventInfo(event)
+        for participant in eventinfo['participants']:
+            if participant not in userids:
+                userids.append(participant)
+
+    ages = {}
+    locations = {}
+    year = datetime.now().year
+    for user in userids:
+        userinfo = getVolunteerInfo(user)
+        age = year - datetime.strptime(userinfo['birthdate'], '%d/%m/%Y').year
+        if age not in ages:
+            ages[age] = 0
+        ages[age] += 1
+        location = userinfo['location']
+        if location not in locations:
+            locations[location] = 0
+        locations[location] += 1
+    
+    return ages, locations
+
+def getOrganiserAnalytics(organiserid):
+    organiserinfo = getOrganiserInfo(organiserid)
+    eventids = organiserinfo['events']
+    return processAnalytics(eventids)
+
+def getEventAnalytics(eventid):
+    return processAnalytics([eventid])
+
 if __name__ == '__main__':
-    getVolunteeringHours('alien')
+    print(getEventAnalytics('food_drive_1'))
