@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %} Volunteer Registration {% endblock %} <!-- Title goes here -->
+{% block head %} {{ super() }} {% endblock %}
+
+{% block content %}
+
+<div class="container-fluid p-0 row">
+
+    <div class="col-7">
+        <img src="https://www.fastweb.com/uploads/article_photo/photo/2038859/crop635w_Volunteer.jpeg" style="max-height: 100vh; width: 100vw; object-fit:cover;">
+    </div>
+    <div class="container col d-flex flex-column justify-content-center">
+        <div class="bg-light p-5">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flashes">
+                {% for category, message in messages %}
+		<div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            <br>
+            {% endif %}
+            {% endwith %}
+	    <h1>Enter Registration Details (Volunteer):</h1>
+            <hr>
+            <form id="userregisterform" action="" method="post" class="form-group">
+                <div class="input-group mb-3">
+		    <input type="text" name="name" class="form-control" placeholder="Name" aria-label="Name" value="{{request.form['name']}}">
+                </div>
+
+                <div class="input-group mb-3">
+		    <input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" value={{request.form['username']}}>
+                </div>
+
+                <div class="input-group mb-3">
+		    <input type="text" name="phone" class="form-control" placeholder="Phone" aria-label="Phone" value={{request.form['phone']}}>
+                    <input type="text" name="birthdate" class="form-control" placeholder="Birthdate (DD/MM/YYYY)" aria-label="Birthdate (DD/MM/YYYY)" value={{request.form['birthdate']}}>
+		</div>
+
+		<div class="input-group mb-3">
+		    <select name="location" class="form-select" placeholder="Location" aria-label="Location" value={{request.form['location']}}>
+		    	<option value="Central">Central</option>
+			<option value="North">North</option>
+			<option value="South">South</option>
+			<option value="East">East</option>
+			<option value="West">West</option>
+		    </select>
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="password" name="password" class="form-control" placeholder="Password" aria-label="Password">
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="password" name="password2" class="form-control" placeholder="Re-enter Password" aria-label="Re-enter Password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Register</button>
+		<a class="btn btn-link" href="/login" role="button">Existing User? Login here!</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
