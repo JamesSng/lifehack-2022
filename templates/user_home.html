@@ -51,12 +51,85 @@
 	</div>
 	{% if userinfo != None %}
 	<div class="row">
-		<!--TODO insert stuff from user profile-->
+		<div class="col-5">
+			<h4>Volunteering Interests</h4>
+			<div>
+				<canvas id="radar-chart" style="width:100%; height:auto;"> </canvas>
+				<script>
+					const data = {
+						labels: {{tags | safe}},
+						datasets: [{
+							label: '{{profileinfo.username}}\'s Interests',
+							data: {{data}},
+							fill: true,
+							backgroundColor: 'rgba(255, 99, 132, 0.2)',
+							borderColor: 'rgb(255, 99, 132)',
+							pointBackgroundColor: 'rgb(255, 99, 132)',
+							pointBorderColor: '#fff',
+							pointHoverBackgroundColor: '#fff',
+							pointHoverBorderColor: 'rgb(255, 99, 132)'
+						}]
+					};
+					const config = {
+						type: 'radar',
+						data: data,
+						options: {
+							elements: {
+								line: {
+									borderWidth: 3
+								}
+							}
+						},
+					};
+					
+					window.onload = function() {
+						var radarChart = new Chart(document.getElementById("radar-chart"), config);
+					}
+				</script>
+			</div>
+		</div>
+
+		<div class="col overflow-auto">
+			<h5>Want to view more information about your volunteering experience?</h5>
+			<button type="button" class="btn btn-primary">Go To My Profile</button>
+		</div>
+	</div>
+	<div class="row overflow-auto p-4 d-flex flex-row justify-content-center">
+		<h4>Top 5 Recommended Events for {{userinfo.username}}</h4>
+		{% for rec in topfive %}
+		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
+			<h4 class="card-header p-2"> {{rec.title}} </h4>
+			<img src="{{rec.image}}">
+			<div class="card-body">
+				<table class="table table-borderless table-sm">
+				<tbody>
+				<tr>
+					<th scope="row"> Date </th>
+					<td> {{event.date}} </td>
+				</tr>
+				<tr>
+					<th scope="row"> Organiser </th>
+					<td> {{event.organiser}} </td>
+				</tr>
+				<tr>                                    
+					<th scope="row"> Type </th>
+					<td> {{event.type}} </td>
+				</tr>
+				<tr>                                    
+					<th scope="row"> Location </th>
+					<td> {{event.location}} </td>
+				</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+		{% endfor %}
 	</div>
 	{% endif %}
-	<div class="row overflow-auto">
+	<div class="row overflow-auto p-4 d-flex flex-row justify-content-center">
+		<h4>View/Filter Events!</h4>
 		{% for event in eventlist %}
-		<div class="card shadow-sm p-0">
+		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
 			<h4 class="card-header p-2"> {{event.title}} </h4>
 			<img src="{{event.image}}">
 			<div class="card-body">
@@ -87,5 +160,6 @@
 </div>
 
 {% endblock %}
+
 
 

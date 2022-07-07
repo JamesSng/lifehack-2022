@@ -305,7 +305,7 @@ def processAnalytics(eventids):
     for user in userids:
         userinfo = getVolunteerInfo(user)
         age = year - datetime.strptime(userinfo['birthdate'], '%d/%m/%Y').year
-        if age not in ages:
+            if age not in ages:
             ages[age] = 0
         ages[age] += 1
         location = userinfo['location']
