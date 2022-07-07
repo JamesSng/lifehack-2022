@@ -3,6 +3,8 @@ from boto3.dynamodb.conditions import Key
 from flask import session
 import os
 from hashlib import sha256
+from datetime import datetime, timedelta
+import csv
 
 os.environ['AWS_DEFAULT_REGION'] = 'us-west-2'
 
@@ -157,9 +159,9 @@ def createOrganiser(name, username, bio, password):
 def updateEventInfo(eventid, info):
 	events_table.update_item(
         Key = {'eventid': eventid},
-        UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e',
-        ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants']},
-        ExpressionAttributeNames = {'#b':'date'}
+        UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, type=:j, url=:k',
+        ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants'], ':f':info['hours'], ':g':info['location'], ':h':info['description'], ':i':info['title'], ':j':info['type'], ':k':info['url']},
+        ExpressionAttributeNames = {'#b':'date', '#g':'location'}
     )
 
 def hashPassword(password):
@@ -234,5 +236,52 @@ def addFriend(username, friend):
         userinfo['friends'].append(friend)
     updateVolunteerInfo(username, userinfo)
 
+def getEventsFromVolunteer(username):
+    userinfo = getVolunteerInfo(username)
+    eventids = userinfo['events']
+    events = []
+    for event in eventids:
+        events.append(getEventInfo(event))
+    return events
+
+def getEventTypes():
+    return ['Children and Youth', 'Seniors', 'Environment', 'Underpriveleged People', 'Arts and Heritage']
+
+def getVolunteeringInterests(username):
+    events = getEventsFromVolunteer(username)
+    types = {}
+    for i in getEventTypes():
+        types[i] = 0
+    total = 0
+    for eventinfo in events:
+        print(eventinfo['eventid'])
+        types[eventinfo['type']] += 1
+        total += 1
+    res = []
+    for key, value in types.items():
+        res.append(int(value / total * 100))
+    return res
+
+def getVolunteeringHours(username):
+    events = getEventsFromVolunteer(username)
+    dates = {}
+    now = datetime.now()
+    for eventinfo in events:
+        date = datetime.strptime(eventinfo['date'], '%d/%m/%Y')
+        for i in range(int(eventinfo['num_occurrences'])):
+            datestr = date.strftime('%Y-%m-%d')
+            if datestr not in dates:
+                dates[datestr] = 0
+            dates[datestr] += eventinfo['hours']
+            date += timedelta(days = 7)
+            if date > now:
+                break
+
+    file = open(f'resources/{username}.csv', 'w')
+    writer = csv.writer(file)
+    for key, value in dates.items():
+        writer.writerow([key, value])
+    file.close()
+
 if __name__ == '__main__':
-    pass
+    getVolunteeringHours('alien')

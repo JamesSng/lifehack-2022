@@ -4,46 +4,88 @@
 
 {% block content %}
 
-<div class="container-fluid p-0 row">
-	<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-		<div class="carousel-indicators">
-			<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-			<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-			<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+<div class="container-fluid p-0 col">
+	<div class="row p-0">
+		<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+				<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+			</div>
+			<div class="carousel-inner">
+				<div class="carousel-item carousel-image-homepage active">
+					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290379948113/crop2.jpg" class="d-block w-100" alt="...">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>First slide label</h5>
+						<p>Some representative placeholder content for the first slide.</p>
+					</div>
+				</div>
+				<div class="carousel-item carousel-image-homepage">
+					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290715496559/crop3.jpg" class="d-block w-100" alt="...">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Second slide label</h5>
+						<p>Some representative placeholder content for the second slide.</p>
+					</div>
+				</div>
+				<div class="carousel-item carousel-image-homepage">
+					<img src="https://media.discordapp.net/attachments/903191753086078997/994539289935355914/crop1.jpg" class="d-block w-100" alt="...">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Third slide label</h5>
+						<p>Some representative placeholder content for the third slide.</p>
+					</div>
+				</div>
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+			{% if userinfo == None %}
+			<button type="button" class="btn btn-primary">Sign in as Volunteer!</button>
+			<button type="button" class="btn btn-secondary">Sign in as Organiser!</button>
+			{% endif %}
 		</div>
-		<div class="carousel-inner">
-			<div class="carousel-item active">
-				<img src="https://www.fastweb.com/uploads/article_photo/photo/2038859/crop635w_Volunteer.jpeg" class="d-block w-100" alt="...">
-				<div class="carousel-caption d-none d-md-block">
-					<h5>First slide label</h5>
-					<p>Some representative placeholder content for the first slide.</p>
-				</div>
-			</div>
-			<div class="carousel-item">
-				<img src="https://www.fastweb.com/uploads/article_photo/photo/2038859/crop635w_Volunteer.jpeg" class="d-block w-100" alt="...">
-				<div class="carousel-caption d-none d-md-block">
-					<h5>Second slide label</h5>
-					<p>Some representative placeholder content for the second slide.</p>
-				</div>
-			</div>
-			<div class="carousel-item">
-				<img src="https://www.fastweb.com/uploads/article_photo/photo/2038859/crop635w_Volunteer.jpeg" class="d-block w-100" alt="...">
-				<div class="carousel-caption d-none d-md-block">
-					<h5>Third slide label</h5>
-					<p>Some representative placeholder content for the third slide.</p>
-				</div>
+	</div>
+	{% if userinfo != None %}
+	<div class="row">
+		<!--TODO insert stuff from user profile-->
+	</div>
+	{% endif %}
+	<div class="row overflow-auto">
+		{% for event in eventlist %}
+		<div class="card shadow-sm p-0">
+			<h4 class="card-header p-2"> {{event.title}} </h4>
+			<img src="{{event.image}}">
+			<div class="card-body">
+				<table class="table table-borderless table-sm">
+				<tbody>
+				<tr>
+					<th scope="row"> Date </th>
+					<td> {{event.date}} </td>
+				</tr>
+				<tr>
+					<th scope="row"> Organiser </th>
+					<td> {{event.organiser}} </td>
+				</tr>
+				<tr>                                    
+					<th scope="row"> Type </th>
+					<td> {{event.type}} </td>
+				</tr>
+				<tr>                                    
+					<th scope="row"> Location </th>
+					<td> {{event.location}} </td>
+				</tr>
+				</tbody>
+				</table>
 			</div>
 		</div>
-		<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Previous</span>
-		</button>
-		<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-			<span class="carousel-control-next-icon" aria-hidden="true"></span>
-			<span class="visually-hidden">Next</span>
-		</button>
+		{% endfor %}
 	</div>
 </div>
 
 {% endblock %}
+
 

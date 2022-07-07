@@ -2,5 +2,5 @@ from flask import render_template, redirect, request, flash, get_flashed_message
 import awstools
 
 def user_home():
-    return render_template('user_home.html', userinfo=awstools.getCurrentUserInfo())
+    return render_template('user_home.html', userinfo=awstools.getCurrentUserInfo(), eventlist=awstools.getAllEvents())
 

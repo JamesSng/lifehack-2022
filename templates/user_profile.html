@@ -13,17 +13,21 @@
 					<tbody>
 					<tr>
 						<th scope="row"> Name </th>
-						<td> {{profileinfo.fullname}} </td>
+						<td> {{profileinfo.name}} </td>
 					</tr><tr>
 						<th scope="row"> Username </th>
 						<td> {{profileinfo.username}} </td>
-					</tr><tr>                                    
+					</tr>
+					{% if profileinfo.username == userinfo.username %}
+					<tr>                                    
 						<th scope="row"> Phone Number (Private) </th>
 						<td> {{profileinfo.phone}} </td></tr><tr>
 						<th scope="row"> Date of Birth (Private) </th>
 						<td> {{profileinfo.birthdate}} </td></tr><tr>
 						<th scope="row"> Residential Location (Private) </th>
-						<td> {{profileinfo.location}} </td></tr></tbody></table>
+						<td> {{profileinfo.location}} </td></tr>
+					{% endif %}
+					</tbody></table>
 				</div>
 			</div>
 		</div>
@@ -35,18 +39,16 @@
 
 	<div class="col p-4">
 		<div class="row mb-3">
-			<div class="col-4">
+			<div class="col-5">
 				<h4>Volunteering Interests</h4>
 				<div>
 					<canvas id="radar-chart" style="width:100%; height:auto;"> </canvas>
 					<script>
 						const data = {
-							labels: [
-								'tag1', 'tag2', 'tag3', 'tag4', 'tag5'
-							],
+							labels: {{tags | safe}},
 							datasets: [{
 								label: '{{profileinfo.username}}\'s Interests',
-								data: [65, 59, 90, 81, 56],
+								data: {{data}},
 								fill: true,
 								backgroundColor: 'rgba(255, 99, 132, 0.2)',
 								borderColor: 'rgb(255, 99, 132)',
@@ -79,11 +81,10 @@
 				<h4>Volunteer Hours</h4>
 				<div id="calendarChart" style="width:100%;height:auto;"></div>
 				<script type="text/javascript">
-					console.log("HIIII")
 					var chart = JSC.chart('calendarChart', { 
 						debug: true, 
 						type: 'calendar year solid', 
-						data: './resources/{{profileinfo.username}}.csv',
+						data: '/resources/{{profileinfo.username}}.csv',
 						title_label_text: 'Hours of Volunteering Per Day', 
 						defaultSeries_legendEntry_value: 'Total: %zSum', 
 						defaultPoint: { 
