@@ -78,34 +78,23 @@
 			<div class="col">
 				<h4>Volunteer Hours</h4>
 				<div id="calendarChart" style="width:100%;height:auto;"></div>
-				<script>
+				<script type="text/javascript">
+					console.log("HIIII")
 					var chart = JSC.chart('calendarChart', { 
 						debug: true, 
-						type: 'horizontal calendar year solid', 
-						data: './resources/CarSales_2017.csv',
+						type: 'calendar year solid', 
+						data: './resources/{{profileinfo.username}}.csv',
 						title_label_text: 'Hours of Volunteering Per Day', 
 						defaultSeries_legendEntry_value: 'Total: %zSum', 
 						defaultPoint: { 
 							tooltip: 
-							'<b>{%date:date D}</b><br> %zValue hours'
+							'<b></b><br> %zValue hours'
 						}, 
 						palette: {
-							defaultRange_legendEntry_value: 
-								'{%min:n3} - {%max:n3}', 
-							ranges: [ 
-								{ value: [0, 0], color: 'rgb(218,0,90)' }, 
-								{ value: [0.1, 2], color: 'rgb(218,12,90)' }, 
-								{ value: [2.1, 4], color: 'rgb(218,24,90)' }, 
-								{ value: [4.1, 6], color: 'rgb(218,36,90)' }, 
-								{ value: [6.1, 8], color: 'rgb(218,48,90)' }, 
-								{ value: [8.1, 10], color: 'rgb(218,60,90)' }, 
-								{ value: [10.1, 12], color: 'rgb(218,72,90)' }, 
-								{ value: [12.1, 14], color: 'rgb(218,84,90)' }, 
-								{ value: [14.1, 24], color: 'rgb(218,96,90)' }, 
-							] 
-						}, 
+							stops: [[0, 'white'], [16, '#0054e5'], [24, '#0054e5']]
+						},
 						toolbar_visible: false
-					}); 
+					})
 				</script>
 			</div>
 		</div>
@@ -115,3 +104,4 @@
 	</div>
 </div>
 {% endblock %}
+
