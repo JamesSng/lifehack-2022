@@ -1,3 +1,6 @@
+import awstools
+
+import pandas as pd
 import string
 import nltk
 from nltk.corpus import stopwords
@@ -42,6 +45,15 @@ def clean_text(text):
     text = ' '.join(new_arr)
     return ''.join([c for c in text if ord(c)<128])
 
+
+def get_events():
+    events = awstools.getAllEvents() 
+    df = pd.DataFrame(columns=['id', 'description'])
+    for event in events:
+        df = df.append([event['eventid'], event['description']])
+    print(df)
+
+
 if __name__ == '__main__':
-    text = input('Type stuff: ')
-    print(clean_text(text))
+    get_events()
+

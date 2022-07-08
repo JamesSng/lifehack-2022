@@ -3,6 +3,20 @@
 {% block head %} {{ super() }} {% endblock %}
 
 {% block content %}
+<div class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+	{% if category != "compileError" %}
+	<div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
+		{{message | safe}}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+</div>
 
 <div class="container-fluid p-0 col">
 	<div class="row p-0">
@@ -99,7 +113,7 @@
 		{% for rec in topfive %}
 		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
 			<h4 class="card-header p-2"> {{rec.title}} </h4>
-			<img src="{{rec.image}}">
+			<img src="{{rec.url}}">
 			<div class="card-body">
 				<table class="table table-borderless table-sm">
 				<tbody>
@@ -159,7 +173,7 @@
 		{% for event in eventlist %}
 		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
 			<h4 class="card-header p-2"> {{event.title}} </h4>
-			<img src="{{event.image}}">
+			<img src="{{event.url}}">
 			<div class="card-body">
 				<table class="table table-borderless table-sm">
 				<tbody>
@@ -181,7 +195,7 @@
 				</tr>
 				</tbody>
 				</table>
-				<a href="/event/{{event.eventid}}" class="stretched-link">View event</a>
+				<a href="/event/{{event.eventid}}" class="stretched-link"></a>
 			</div>
 		</div>
 		{% endfor %}

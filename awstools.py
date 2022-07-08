@@ -93,9 +93,11 @@ def getAllOrganisers():
 
 def getAllEvents():
     value = scan(events_table)
+    return value
+
+def getAllEventsFriends():
+    value = scan(events_table)
     userinfo = getCurrentUserInfo()
-    # userinfo = getVolunteerInfo('alien')
-    # userinfo['usertype'] = 0
     if userinfo == None or userinfo['usertype'] == 1: #organiser
         for event in value:
             event['numfriends'] = 0
@@ -108,7 +110,7 @@ def getAllEvents():
     return value
 
 def getFilteredEvents(lowDate=None, highDate=None, etype=None, friends=False, text=None):
-    events = getAllEvents()
+    events = getAllEventsFriends()
     if lowDate:
         low = parseDate(lowDate) 
         events = [i for i in events if low <= parseDate(i['date'])]
@@ -190,9 +192,9 @@ def createOrganiser(name, username, bio, password):
 def updateEventInfo(eventid, info):
 	events_table.update_item(
         Key = {'eventid': eventid},
-        UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, type=:j, url=:k',
+        UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, #j=:j, #k=:k',
         ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants'], ':f':info['hours'], ':g':info['location'], ':h':info['description'], ':i':info['title'], ':j':info['type'], ':k':info['url']},
-        ExpressionAttributeNames = {'#b':'date', '#g':'location'}
+        ExpressionAttributeNames = {'#b':'date', '#g':'location', '#j':'type', '#k':'url'}
     )
 
 def hashPassword(password):
@@ -290,6 +292,13 @@ def getEventsFromOrganiser(username):
     for event in eventids:
         events.append(getEventInfo(event))
     return events
+
+def getVolunteersFromEvent(eventid):
+    eventinfo = getEventInfo(eventid)
+    users = []
+    for user in eventinfo['participants']:
+        users.append(getVolunteerInfo(user))
+    return users
 
 def getFriendsFromVolunteer(username):
     userinfo = getVolunteerInfo(username)

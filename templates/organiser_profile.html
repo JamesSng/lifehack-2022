@@ -3,6 +3,20 @@
 {% block head %} {{ super() }} {% endblock %}
 
 {% block content %}
+<div class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+	{% if category != "compileError" %}
+	<div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
+		{{message | safe}}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+</div>
 <div class="container-fluid row p-4">
 	<div class="col-4 p-4">
 		<div class="row mb-3">
@@ -25,29 +39,24 @@
 		<div class="row mb-3">
 			<div class="col-5">
 				<h4>Volunteers' Ages</h4>
+			</div>
+
+			<div class="col">
+				<h4>Volunteers' Residential Locations</h4>
 				<div>
 					<canvas id="pie-chart" style="width:100%; height:auto;"> </canvas>
 					<script>
-						const series = [{
-							name: 'Number',
-							points: [
-								{% for key, value in locations.items() %}
-								{name: "{{key}}", y: {{value}}},
-								{% endfor %}
-							]
-						}];
+						var labels = ["North", "South", "East", "West", "Central"]
+						var data = [{{locations['North']}}, {{locations['South']}}, {{locations['East']}}, {{locations['West']}}, {{locations['Central']}}]
+						var bgcolor = ['Red', 'Blue', 'Green', 'Yellow', 'Purple']
 						const config = {
-							legend: {
-								template: '%value %icon %name',
-								position: 'inside left bottom'
-							},
-							defaultSeries: {
-								type: 'pie',
-								pointSelection: true
-							},
-							defaultPoint_label_text: '<b>%name</b>',
-							yAxis: {label_text: 'Number', formatString: 'n'},
-							series: series
+							type: 'doughnut',
+							data:{
+								labels: labels,
+								datasets: [
+									{data: data, backgroundColor: bgcolor}
+								]
+							}
 						};
 						
 						window.onload = function() {
@@ -57,35 +66,13 @@
 					</script>
 				</div>
 			</div>
-
-			<div class="col">
-				<h4>Volunteers' Residential Locations</h4>
-				<div id="calendarChart" style="width:100%;height:auto;"></div>
-				<script type="text/javascript">
-					var chart = JSC.chart('calendarChart', { 
-						debug: true, 
-						type: 'calendar year solid', 
-						data: '/resources/{{profileinfo.username}}.csv',
-						title_label_text: 'Hours of Volunteering Per Day', 
-						defaultSeries_legendEntry_value: 'Total: %zSum', 
-						defaultPoint: { 
-							tooltip: 
-							'<b></b><br> %zValue hours'
-						}, 
-						palette: {
-							stops: [[0, 'white'], [16, '#0054e5'], [24, '#0054e5']]
-						},
-						toolbar_visible: false
-					})
-				</script>
-			</div>
 		</div>
 		<div class="row">
 			<h4>Events Organised</h4>
 			{% for event in eventlist %}
 			<div class="card shadow-sm p-0 m-3" style="width:25vw;">
 				<h4 class="card-header p-2"> {{event.title}} </h4>
-				<img src="{{event.image}}">
+				<img src="{{event.url}}">
 				<div class="card-body">
 					<table class="table table-borderless table-sm">
 					<tbody>
@@ -107,7 +94,7 @@
 					</tr>
 					</tbody>
 					</table>
-					<a href="/event/{{event.eventid}}" class="stretched-link">View event</a>
+					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
 				</div>
 			</div>
 			{% endfor %}

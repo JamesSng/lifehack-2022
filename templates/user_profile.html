@@ -46,7 +46,7 @@
 					</tr>
 					</tbody>
 					</table>
-					<a href="/profile/{{friend.username}}" class="stretched-link">View profile</a>
+					<a href="/profile/{{friend.username}}" class="stretched-link"></a>
 				</div>
 			</div>
 			{% endfor %}
@@ -120,7 +120,7 @@
 			{% for event in eventlist %}
 			<div class="card shadow-sm p-0 m-3" style="width:25vw;">
 				<h4 class="card-header p-2"> {{event.title}} </h4>
-				<img src="{{event.image}}">
+				<img src="{{event.url}}">
 				<div class="card-body">
 					<table class="table table-borderless table-sm">
 					<tbody>
@@ -142,7 +142,7 @@
 					</tr>
 					</tbody>
 					</table>
-					<a href="/event/{{event.eventid}}" class="stretched-link">View event</a>
+					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
 				</div>
 			</div>
 			{% endfor %}
