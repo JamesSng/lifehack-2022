@@ -7,5 +7,7 @@ def user_profile(user):
     tags = awstools.getEventTypes()
     data = awstools.getVolunteeringInterests(user)
     awstools.getVolunteeringHours(user)
-    return render_template('user_profile.html', userinfo=userinfo, profileinfo=profileinfo, tags=tags, data=data)
+    eventlist = awstools.getEventsFromVolunteer(user)
+    friends = awstools.getFriendsFromVolunteer(user)
+    return render_template('user_profile.html', userinfo=userinfo, profileinfo=profileinfo, tags=tags, data=data, eventlist=eventlist, friends=friends)
 

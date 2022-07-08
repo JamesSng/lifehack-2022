@@ -14,21 +14,25 @@
 			</div>
 			<div class="carousel-inner">
 				<div class="carousel-item carousel-image-homepage active">
-					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290379948113/crop2.jpg" class="d-block w-100" alt="...">
-					<div class="carousel-caption d-none d-md-block">
+					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290379948113/crop2.jpg" class="d-block w-100" alt="..." style="opacity:50%">
+				<div class="carousel-caption d-none d-md-block">
 						<h5>First slide label</h5>
 						<p>Some representative placeholder content for the first slide.</p>
-					</div>
+					{% if userinfo == None %}
+					<a role="button" class="btn btn-primary" href="/login">Sign in as Volunteer!</a>
+					<a role="button" class="btn btn-success" href="/org_login">Sign in as Organiser!</a>
+					{% endif %}
+				</div>
 				</div>
 				<div class="carousel-item carousel-image-homepage">
-					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290715496559/crop3.jpg" class="d-block w-100" alt="...">
+					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290715496559/crop3.jpg" class="d-block w-100" alt="..." style="opacity:50%">
 					<div class="carousel-caption d-none d-md-block">
 						<h5>Second slide label</h5>
 						<p>Some representative placeholder content for the second slide.</p>
 					</div>
 				</div>
 				<div class="carousel-item carousel-image-homepage">
-					<img src="https://media.discordapp.net/attachments/903191753086078997/994539289935355914/crop1.jpg" class="d-block w-100" alt="...">
+					<img src="https://media.discordapp.net/attachments/903191753086078997/994539289935355914/crop1.jpg" class="d-block w-100" alt="..." style="opacity:50%">
 					<div class="carousel-caption d-none d-md-block">
 						<h5>Third slide label</h5>
 						<p>Some representative placeholder content for the third slide.</p>
@@ -43,16 +47,12 @@
 				<span class="carousel-control-next-icon" aria-hidden="true"></span>
 				<span class="visually-hidden">Next</span>
 			</button>
-			{% if userinfo == None %}
-			<button type="button" class="btn btn-primary">Sign in as Volunteer!</button>
-			<button type="button" class="btn btn-secondary">Sign in as Organiser!</button>
-			{% endif %}
 		</div>
 	</div>
-	{% if userinfo != None %}
-	<div class="row">
-		<div class="col-5">
-			<h4>Volunteering Interests</h4>
+	{% if userinfo != None  and userinfo['usertype'] == 0%}
+	<div class="row overflow-auto p-4">
+		<div class="col-6">
+			<h2>Volunteering Interests</h2>
 			<div>
 				<canvas id="radar-chart" style="width:100%; height:auto;"> </canvas>
 				<script>
@@ -91,11 +91,11 @@
 
 		<div class="col overflow-auto">
 			<h5>Want to view more information about your volunteering experience?</h5>
-			<button type="button" class="btn btn-primary">Go To My Profile</button>
+			<a role="button" class="btn btn-primary" href="/profile/{{userinfo.username}}">Go To My Profile</a>
 		</div>
 	</div>
 	<div class="row overflow-auto p-4 d-flex flex-row justify-content-center">
-		<h4>Top 5 Recommended Events for {{userinfo.username}}</h4>
+		<h2>Top 5 Recommended Events for {{userinfo.username}}</h2>
 		{% for rec in topfive %}
 		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
 			<h4 class="card-header p-2"> {{rec.title}} </h4>
@@ -127,7 +127,35 @@
 	</div>
 	{% endif %}
 	<div class="row overflow-auto p-4 d-flex flex-row justify-content-center">
-		<h4>View/Filter Events!</h4>
+		<h2>View/Filter Events!</h2>
+		<form id="filtereventsform" action="" method="post" class="form-group">	
+			
+			<label for="date"><b>Date Range:</b></label>
+			<div class="input-group mb-3">
+			<input class="form-control" id="lowDate" name="lowDate" placeholder="Start of Date Range (DD/MM/YYYY)" type="text" value={{request.form['lowDate']}}>
+
+			<input class="form-control" id="highDate" name="highDate" placeholder="End of Date Range (DD/MM/YYYY)" type="text" value={{request.form['highDate']}}>
+			</div>
+			
+			<label for="type"><b>Type:</b></label>
+			<div class="input-group mb-3">
+			<select class="form-select" id="etype" name="etype" placeholder="Type" type="select">
+				<option value="All" {%if request.form['etype'] == "All"%} selected {%endif%}>All</option>
+				<option value="Children and Youth" {%if request.form['etype'] == "Children and Youth"%} selected {%endif%}>Children and Youth</option>
+				<option value="Seniors" {%if request.form['etype'] == "Seniors"%} selected {%endif%}>Seniors</option>
+				<option value="Environment" {%if request.form['etype'] == "Environment"%} selected {%endif%}>Environment</option>
+				<option value="Underprivileged People" {%if request.form['etype'] == "Underprivileged People"%} selected {%endif%}>Underprivileged People</option>
+				<option value="Arts and Heritage" {%if request.form['etype'] == "Arts and Heritage"%} selected {%endif%}>Arts and Heritage</option>
+			</select>
+			</div>
+
+			<div class="input-gruop mb-3">
+			<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Sorting by Friends" name="friends" {%if 'friends' in request.form%} checked {%endif%}>
+			<label for="checkbox"><b>Sort by number of friends taking part</b></label>
+			</div>
+
+			<button type="submit" class="btn btn-primary">Filter</button>
+		</form>
 		{% for event in eventlist %}
 		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
 			<h4 class="card-header p-2"> {{event.title}} </h4>
@@ -153,6 +181,7 @@
 				</tr>
 				</tbody>
 				</table>
+				<a href="/event/{{event.eventid}}" class="stretched-link">View event</a>
 			</div>
 		</div>
 		{% endfor %}

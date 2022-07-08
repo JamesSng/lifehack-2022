@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %} Profile - {{profileinfo.name}} {% endblock %} <!-- Title goes here -->
+{% block head %} {{ super() }} {% endblock %}
+
+{% block content %}
+<div class="container-fluid row p-4">
+	<div class="col-4 p-4">
+		<div class="row mb-3">
+			<div class="card shadow-sm p-0">
+				<h4 class="card-header p-3"> {{profileinfo.name}}'s profile </h4>
+
+				<div class="card-body"><table class="table table-borderless table-sm">
+					<tbody>
+					<tr>
+						<th scope="row"> Bio </th>
+						<td> {% autoescape false %} {{profileinfo.bio}} {% endautoescape %} </td>
+					</tr>
+					</tbody></table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col p-4">
+		<div class="row mb-3">
+			<div class="col-5">
+				<h4>Volunteers' Ages</h4>
+				<div>
+					<canvas id="pie-chart" style="width:100%; height:auto;"> </canvas>
+					<script>
+						const series = [{
+							name: 'Number',
+							points: [
+								{% for key, value in locations.items() %}
+								{name: "{{key}}", y: {{value}}},
+								{% endfor %}
+							]
+						}];
+						const config = {
+							legend: {
+								template: '%value %icon %name',
+								position: 'inside left bottom'
+							},
+							defaultSeries: {
+								type: 'pie',
+								pointSelection: true
+							},
+							defaultPoint_label_text: '<b>%name</b>',
+							yAxis: {label_text: 'Number', formatString: 'n'},
+							series: series
+						};
+						
+						window.onload = function() {
+							console.log('load')
+							var pieChart = new Chart(document.getElementById("pie-chart"), config);
+						}
+					</script>
+				</div>
+			</div>
+
+			<div class="col">
+				<h4>Volunteers' Residential Locations</h4>
+				<div id="calendarChart" style="width:100%;height:auto;"></div>
+				<script type="text/javascript">
+					var chart = JSC.chart('calendarChart', { 
+						debug: true, 
+						type: 'calendar year solid', 
+						data: '/resources/{{profileinfo.username}}.csv',
+						title_label_text: 'Hours of Volunteering Per Day', 
+						defaultSeries_legendEntry_value: 'Total: %zSum', 
+						defaultPoint: { 
+							tooltip: 
+							'<b></b><br> %zValue hours'
+						}, 
+						palette: {
+							stops: [[0, 'white'], [16, '#0054e5'], [24, '#0054e5']]
+						},
+						toolbar_visible: false
+					})
+				</script>
+			</div>
+		</div>
+		<div class="row">
+			<h4>Events Organised</h4>
+			{% for event in eventlist %}
+			<div class="card shadow-sm p-0 m-3" style="width:25vw;">
+				<h4 class="card-header p-2"> {{event.title}} </h4>
+				<img src="{{event.image}}">
+				<div class="card-body">
+					<table class="table table-borderless table-sm">
+					<tbody>
+					<tr>
+						<th scope="row"> Date </th>
+						<td> {{event.date}} </td>
+					</tr>
+					<tr>
+						<th scope="row"> Organiser </th>
+						<td> {{event.organiser}} </td>
+					</tr>
+					<tr>                                    
+						<th scope="row"> Type </th>
+						<td> {{event.type}} </td>
+					</tr>
+					<tr>                                    
+						<th scope="row"> Location </th>
+						<td> {{event.location}} </td>
+					</tr>
+					</tbody>
+					</table>
+					<a href="/event/{{event.eventid}}" class="stretched-link">View event</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}
+

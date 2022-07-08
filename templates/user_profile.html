@@ -34,6 +34,22 @@
 
 		<div class="row">
 			<h4>Friends</h4>
+			{% for friend in friends %}
+			<div class="card shadow-sm p-0 mb-3">
+				<h5 class="card-header p-3"> {{friend.username}} </h5>
+				<div class="card-body">
+					<table class="table table-borderless table-sm">
+					<tbody>
+					<tr>
+						<th scope="row"> Name </th>
+						<td> {{friend.name}} </td>
+					</tr>
+					</tbody>
+					</table>
+					<a href="/profile/{{friend.username}}" class="stretched-link">View profile</a>
+				</div>
+			</div>
+			{% endfor %}
 		</div>
 	</div>
 
@@ -101,6 +117,35 @@
 		</div>
 		<div class="row">
 			<h4>Volunteering History</h4>
+			{% for event in eventlist %}
+			<div class="card shadow-sm p-0 m-3" style="width:25vw;">
+				<h4 class="card-header p-2"> {{event.title}} </h4>
+				<img src="{{event.image}}">
+				<div class="card-body">
+					<table class="table table-borderless table-sm">
+					<tbody>
+					<tr>
+						<th scope="row"> Date </th>
+						<td> {{event.date}} </td>
+					</tr>
+					<tr>
+						<th scope="row"> Organiser </th>
+						<td> {{event.organiser}} </td>
+					</tr>
+					<tr>                                    
+						<th scope="row"> Type </th>
+						<td> {{event.type}} </td>
+					</tr>
+					<tr>                                    
+						<th scope="row"> Location </th>
+						<td> {{event.location}} </td>
+					</tr>
+					</tbody>
+					</table>
+					<a href="/event/{{event.eventid}}" class="stretched-link">View event</a>
+				</div>
+			</div>
+			{% endfor %}
 		</div>
 	</div>
 </div>

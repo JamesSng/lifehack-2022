@@ -93,10 +93,10 @@ def getAllOrganisers():
 
 def getAllEvents():
     value = scan(events_table)
-    #userinfo = getCurrentUserInfo()
-    userinfo = getVolunteerInfo('alien')
-    userinfo['usertype'] = 0
-    if userinfo['usertype'] == 1: #organiser
+    userinfo = getCurrentUserInfo()
+    # userinfo = getVolunteerInfo('alien')
+    # userinfo['usertype'] = 0
+    if userinfo == None or userinfo['usertype'] == 1: #organiser
         for event in value:
             event['numfriends'] = 0
     else:
@@ -291,8 +291,16 @@ def getEventsFromOrganiser(username):
         events.append(getEventInfo(event))
     return events
 
+def getFriendsFromVolunteer(username):
+    userinfo = getVolunteerInfo(username)
+    friendids = userinfo['friends']
+    friends = []
+    for friend in friendids:
+        friends.append(getVolunteerInfo(friend))
+    return friends
+
 def getEventTypes():
-    return ['Children and Youth', 'Seniors', 'Environment', 'Underpriveleged People', 'Arts and Heritage']
+    return ['Children and Youth', 'Seniors', 'Environment', 'Underprivileged People', 'Arts and Heritage']
 
 def getVolunteeringInterests(username):
     events = getEventsFromVolunteer(username)
