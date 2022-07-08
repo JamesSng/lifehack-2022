@@ -18,15 +18,19 @@
 						<th scope="row"> Username </th>
 						<td> {{profileinfo.username}} </td>
 					</tr>
-					</tbody></table>
 					{% if profileinfo.username == userinfo.username %}
 					<tr>                                    
 						<th scope="row"> Phone Number (Private) </th>
-						<td> {{profileinfo.phone}} </td></tr><tr>
+						<td> {{profileinfo.phone}} </td>
+					</tr>
+					<tr>
 						<th scope="row"> Date of Birth (Private) </th>
-						<td> {{profileinfo.birthdate}} </td></tr><tr>
+						<td> {{profileinfo.birthdate}} </td>
+					</tr>
+					<tr>
 						<th scope="row"> Residential Location (Private) </th>
-						<td> {{profileinfo.location}} </td></tr>
+						<td> {{profileinfo.location}} </td>
+					</tr>
 					{% else %}
 					<form id="friendform" action="" method="post" class="form-group">
 						{% if profileinfo['username'] not in userinfo['friends'] %}
