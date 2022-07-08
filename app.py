@@ -23,7 +23,7 @@ app.add_url_rule('/login', view_func = user_login_view.user_login, methods = ['G
 app.add_url_rule('/org_login', view_func = organiser_login_view.organiser_login, methods = ['GET', 'POST'])
 app.add_url_rule('/register', view_func = user_register_view.user_register, methods = ['GET', 'POST'])
 app.add_url_rule('/org_register', view_func = organiser_register_view.organiser_register, methods = ['GET', 'POST'])
-app.add_url_rule('/profile/<user>', view_func = user_profile_view.user_profile)
+app.add_url_rule('/profile/<user>', view_func = user_profile_view.user_profile, methods=['GET', 'POST'])
 app.add_url_rule('/user_home', view_func = user_home_view.user_home, methods = ['GET', 'POST'])
 app.add_url_rule('/org_profile/<user>', view_func = organiser_profile_view.organiser_profile)
 app.add_url_rule('/event/<event>', view_func = user_event_view.user_event, methods = ['GET', 'POST'])

@@ -277,6 +277,12 @@ def addFriend(username, friend):
         userinfo['friends'].append(friend)
     updateVolunteerInfo(username, userinfo)
 
+def removeFriend(username, friend):
+    userinfo = getVolunteerInfo(username)
+    if friend in userinfo['friends']:
+        userinfo['friends'].remove(friend)
+    updateVolunteerInfo(username, userinfo)
+
 def getEventsFromVolunteer(username):
     userinfo = getVolunteerInfo(username)
     eventids = userinfo['events']
@@ -323,7 +329,10 @@ def getVolunteeringInterests(username):
         total += 1
     res = []
     for key, value in types.items():
-        res.append(int(value / total * 100))
+        if total != 0:
+            res.append(int(value / total * 100))
+        else:
+            res.append(0)
     return res
 
 def getVolunteeringHours(username):

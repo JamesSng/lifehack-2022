@@ -25,6 +25,7 @@ def organiser_register():
             return get_template()
 
         awstools.createOrganiser(name, username, bio, password)
+        awstools.login(1, username)
         flash(f'Welcome {username}!', 'success')
         return redirect('/')
     return get_template()

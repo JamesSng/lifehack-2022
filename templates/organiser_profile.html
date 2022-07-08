@@ -36,6 +36,7 @@
 	</div>
 
 	<div class="col p-4">
+		{% if eventlist | length != 0 %} 
 		<div class="row mb-3">
 			<div class="col-5">
 				<h4>Volunteers' Ages</h4>
@@ -99,6 +100,9 @@
 			</div>
 			{% endfor %}
 		</div>
+		{% else %}
+		<h4>This organiser has no events :(</h4>
+		{% endif %}
 	</div>
 </div>
 {% endblock %}

@@ -3,7 +3,7 @@ import awstools
 
 def user_home():
     userinfo = awstools.getCurrentUserInfo()
-    eventlist = awstools.getAllEvents()
+    eventlist = awstools.getAllEventsFriends()
     for event in eventlist:
         info = awstools.getOrganiserInfo(event['organiser'])
         event['organiser'] = info['name']

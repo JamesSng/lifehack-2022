@@ -43,6 +43,7 @@ def user_register():
             return get_template()
 
         awstools.createVolunteer(name, username, phone, birthdate, location, password)
+        awstools.login(0, username)
         flash(f'Welcome {username}!', 'success')
         return redirect('/')
     return get_template()
