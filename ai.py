@@ -48,9 +48,9 @@ def clean_text(text):
 
 def get_events():
     events = awstools.getAllEvents() 
-    df = pd.DataFrame(columns=['id', 'description'])
+    df = pd.DataFrame(['a', 'b'], columns=['id', 'description'])
     for event in events:
-        df = df.append([event['eventid'], event['description']])
+        df = df.append(pd.DataFrame([event['eventid'], event['description']], columns=['id', 'description']))
     print(df)
 
 
