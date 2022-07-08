@@ -13,6 +13,9 @@ volunteers_table = dynamodb.Table('volunteers')
 organisers_table = dynamodb.Table('organisers')
 events_table = dynamodb.Table('events')
 
+def parseDate(dateString):
+    return datetime.strptime(dateString, '%d/%m/%Y')
+
 # Scanning dynamoDB
 def scan(table, ProjectionExpression = None, ExpressionAttributeNames = None, ExpressionAttributeValues = None):
     results = []
@@ -89,8 +92,36 @@ def getAllOrganisers():
 	return value
 
 def getAllEvents():
-	value = scan(events_table)
-	return value
+    value = scan(events_table)
+    #userinfo = getCurrentUserInfo()
+    userinfo = getVolunteerInfo('alien')
+    userinfo['usertype'] = 0
+    if userinfo['usertype'] == 1: #organiser
+        for event in value:
+            event['numfriends'] = 0
+    else:
+        for event in value:
+            event['numfriends'] = 0
+            for friend in userinfo['friends']:
+                if friend in event['participants']:
+                    event['numfriends'] += 1
+    return value
+
+def getFilteredEvents(lowDate=None, highDate=None, etype=None, friends=False, text=None):
+    events = getAllEvents()
+    if lowDate:
+        low = parseDate(lowDate) 
+        events = [i for i in events if low <= parseDate(i['date'])]
+    if highDate:
+        high = parseDate(highDate)
+        events = [i for i in events if parseDate(i['date']) <= high]
+    if etype:
+        events = [i for i in events if i['type'] == etype]
+    if text:
+        events = [i for i in events if (text in i['title'] or text in i['description'])]
+    if friends:
+        events.sort(reverse=True, key=lambda i: i['numfriends'])
+    return events
 
 def getVolunteerInfo(username):
 	response = volunteers_table.query(
@@ -252,6 +283,14 @@ def getEventsFromVolunteer(username):
         events.append(getEventInfo(event))
     return events
 
+def getEventsFromOrganiser(username):
+    userinfo = getOrganiserInfo(username)
+    eventids = userinfo['events']
+    events = []
+    for event in eventids:
+        events.append(getEventInfo(event))
+    return events
+
 def getEventTypes():
     return ['Children and Youth', 'Seniors', 'Environment', 'Underpriveleged People', 'Arts and Heritage']
 
@@ -275,7 +314,7 @@ def getVolunteeringHours(username):
     dates = {}
     now = datetime.now()
     for eventinfo in events:
-        date = datetime.strptime(eventinfo['date'], '%d/%m/%Y')
+        date = parseDate(eventinfo['date'])
         for i in range(int(eventinfo['num_occurrences'])):
             datestr = date.strftime('%Y-%m-%d')
             if datestr not in dates:
@@ -304,8 +343,8 @@ def processAnalytics(eventids):
     year = datetime.now().year
     for user in userids:
         userinfo = getVolunteerInfo(user)
-        age = year - datetime.strptime(userinfo['birthdate'], '%d/%m/%Y').year
-            if age not in ages:
+        age = year - parseDate(userinfo['birthdate']).year
+        if age not in ages:
             ages[age] = 0
         ages[age] += 1
         location = userinfo['location']
@@ -324,4 +363,4 @@ def getEventAnalytics(eventid):
     return processAnalytics([eventid])
 
 if __name__ == '__main__':
-    print(getEventAnalytics('food_drive_1'))
+    print(getEventsFromOrganiser('singaporezoo'))
