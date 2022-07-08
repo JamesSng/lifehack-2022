@@ -18,12 +18,12 @@
 	{% endwith %}
 </div>
 
-<div class="container-fluid row p-4">
-	<div class="row mb-3">
-		<div class="card shadow-sm p-0">
-			<h4 class="card-header p-3"> {{eventinfo.title}} </h4>
-			<img src="{{eventinfo.url}}">
-			<div class="card-body"><table class="table table-borderless table-sm">
+<div class="container-fluid p-4">
+	<div class="row p-0">
+		<div class="col-6 m-3">
+			<div class="row card shadow-sm p-0 unclickable-card mb-3">
+				<h4 class="card-header p-3"> {{eventinfo.title}} </h4>
+				<div class="card-body"><table class="table table-borderless table-sm">
 					<tbody>
 						<tr>
 							<th scope="row"> Description </th>
@@ -49,70 +49,78 @@
 							<th scope="row"> Type </th>
 							<td> {{eventinfo.type}} </td>
 						</tr>
+						<tr>
+							<th scope="row"> Number of Occurrences </th>
+							<td> {{eventinfo.num_occurrences}} </td>
+						</tr>
 					</tbody></table>
 					<form id="registerform" action="" method="post" class="form-group">
+						{% if userinfo != None and userinfo.usertype == 0 %}
 						{% if userinfo['username'] not in eventinfo['participants'] %}
 						<button type="submit" class="btn btn-primary">Register!</button>
 						{% else %}
 						<button type="submit" class="btn btn-primary">Remove Registration :(</button>
 						{% endif %}
+						{% endif %}
 					</form>
+				</div>
 			</div>
+			<div class="row card shadow-sm p-0 unclickable-card">
+				<h4 class="card-header p-3"> Participants </h4>
+
+				<div class="card-body">
+					<ul>
+						{% for user in participants %}
+						<li>
+							{{user.name}} (<a href="/profile/{{user.username}}">{{user.username}}</a>)
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col">
+			<img src="{{eventinfo.url}}">
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-6">
-			<h4>Participants</h4>
-			{% for user in participants %}
-			<div class="card shadow-sm p-0 mb-3">
-				<h5 class="card-header p-3"> {{user.username}} </h5>
-				<div class="card-body">
-					<table class="table table-borderless table-sm">
-						<tbody>
-							<tr>
-								<th scope="row"> Name </th>
-								<td> {{user.name}} </td>
-							</tr>
-						</tbody>
-					</table>
-					<a href="/profile/{{user.username}}" class="stretched-link">View profile</a>
-				</div>
+
+	<div class="row overflow-auto p-4 d-flex flex-row justify-content-center">
+		<hr>
+		<h4 style="text-align:center;">Other events by organiser</h4>
+
+		{% for event in others %}
+		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
+			<h4 class="card-header p-2"> {{event.title}} </h4>
+			<div class="card-body">
+				<table class="table table-borderless table-sm">
+				<tbody>
+				<tr>
+					<th scope="row" class="table-width-30"> Date </th>
+					<td> {{event.date}} </td>
+				</tr>
+				<tr>                                    
+					<th scope="row" class="table-width-30"> Type </th>
+					<td> {{event.type}} </td>
+				</tr>
+				<tr>                                    
+					<th scope="row" class="table-width-30"> Location </th>
+					<td> {{event.location}} </td>
+				</tr>
+				{% if userinfo != None %}
+				<tr>
+					<th scope="row" class="table-width-30"> # of Your Friends </th>
+					<td> {{event.numfriends}} </td>
+				</tr>
+				{% endif %}
+				</tbody>
+				</table>
+				<a href="/edit_event/{{event.eventid}}" class="stretched-link"></a>
 			</div>
-			{% endfor %}
 		</div>
-		<div class="col-md-6">
-			<h4>Other events by organiser</h4>
-			{% for event in others %}
-			<div class="card shadow-sm p-0 m-3">
-				<h4 class="card-header p-2"> {{event.title}} </h4>
-				<img src="{{event.url}}">
-				<div class="card-body">
-					<table class="table table-borderless table-sm">
-						<tbody>
-							<tr>
-								<th scope="row"> Date </th>
-								<td> {{event.date}} </td>
-							</tr>
-							<tr>
-								<th scope="row"> Organiser </th>
-								<td> {{event.organiser}} </td>
-							</tr>
-							<tr>                                    
-								<th scope="row"> Type </th>
-								<td> {{event.type}} </td>
-							</tr>
-							<tr>                                    
-								<th scope="row"> Location </th>
-								<td> {{event.location}} </td>
-							</tr>
-						</tbody>
-					</table>
-					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
+		{% endfor %}
 	</div>
 </div>
 {% endblock %}
+
 

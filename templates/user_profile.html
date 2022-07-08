@@ -6,7 +6,7 @@
 <div class="container-fluid row p-4">
 	<div class="col-4 p-4">
 		<div class="row mb-3">
-			<div class="card shadow-sm p-0">
+			<div class="card shadow-sm p-0 unclickable-card">
 				<h4 class="card-header p-3"> {{profileinfo.username}}'s profile </h4>
 
 				<div class="card-body"><table class="table table-borderless table-sm">
@@ -31,37 +31,35 @@
 						<th scope="row"> Residential Location (Private) </th>
 						<td> {{profileinfo.location}} </td>
 					</tr>
-					{% else %}
+					{% endif %}
+					</tbody></table>
 					<form id="friendform" action="" method="post" class="form-group">
-						{% if profileinfo['username'] not in userinfo['friends'] %}
-						<button type="submit" class="btn btn-primary">Add Friend</button>
-						{% else %}
-						<button type="submit" class="btn btn-primary">Remove Friend :(</button>
+						{% if profileinfo.username != userinfo.username and userinfo.usertype == 0 %}
+							{% if profileinfo['username'] not in userinfo['friends'] %}
+							<button type="submit" class="btn btn-primary">Add Friend</button>
+							{% else %}
+							<button type="submit" class="btn btn-primary">Remove Friend :(</button>
+							{% endif %}
 						{% endif %}
 					</form>
-					{% endif %}
 				</div>
 			</div>
 		</div>
 
 		<div class="row">
-			<h4>Friends</h4>
-			{% for friend in friends %}
-			<div class="card shadow-sm p-0 mb-3">
-				<h5 class="card-header p-3"> {{friend.username}} </h5>
+			<div class="card shadow-sm p-0 unclickable-card">
+				<h4 class="card-header p-3"> Friends </h4>
+
 				<div class="card-body">
-					<table class="table table-borderless table-sm">
-					<tbody>
-					<tr>
-						<th scope="row"> Name </th>
-						<td> {{friend.name}} </td>
-					</tr>
-					</tbody>
-					</table>
-					<a href="/profile/{{friend.username}}" class="stretched-link"></a>
+					<ul>
+						{% for friend in friends %}
+						<li>
+							{{friend.name}} (<a href="/profile/{{friend.username}}">{{friend.username}}</a>)
+						</li>
+						{% endfor %}
+					</ul>
 				</div>
 			</div>
-			{% endfor %}
 		</div>
 	</div>
 
@@ -121,7 +119,7 @@
 							'<b></b><br> %zValue hours'
 						}, 
 						palette: {
-							stops: [[0, 'white'], [16, '#0054e5'], [24, '#0054e5']]
+							stops: [[0, 'white'], [16, '#0d6efd'], [24, '#0d6efd']]
 						},
 						toolbar_visible: false
 					})
@@ -131,26 +129,25 @@
 		<div class="row">
 			<h4>Volunteering History</h4>
 			{% for event in eventlist %}
-			<div class="card shadow-sm p-0 m-3" style="width:25vw;">
+			<div class="card shadow-sm p-0 m-2" style="width:15vw;">
 				<h4 class="card-header p-2"> {{event.title}} </h4>
-				<img src="{{event.url}}">
 				<div class="card-body">
 					<table class="table table-borderless table-sm">
 					<tbody>
 					<tr>
-						<th scope="row"> Date </th>
+						<th scope="row" class="table-width-30"> Date </th>
 						<td> {{event.date}} </td>
 					</tr>
 					<tr>
-						<th scope="row"> Organiser </th>
+						<th scope="row" class="table-width-30"> Organiser </th>
 						<td> {{event.organiser}} </td>
 					</tr>
 					<tr>                                    
-						<th scope="row"> Type </th>
+						<th scope="row" class="table-width-30"> Type </th>
 						<td> {{event.type}} </td>
 					</tr>
 					<tr>                                    
-						<th scope="row"> Location </th>
+						<th scope="row" class="table-width-30"> Location </th>
 						<td> {{event.location}} </td>
 					</tr>
 					</tbody>
@@ -166,4 +163,5 @@
 	</div>
 </div>
 {% endblock %}
+
 

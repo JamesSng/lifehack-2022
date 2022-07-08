@@ -14,11 +14,12 @@ def user_event(event):
         if userinfo['username'] not in eventinfo['participants']:
             awstools.addEventToVolunteer(userinfo['username'], eventinfo['eventid'])
             flash('Registration successful!', 'success')
-            return redirect(f'/event/{event}')
+            return redirect(f'/event/{event.eventid}')
         else:
             awstools.removeEventFromVolunteer(userinfo['username'], eventinfo['eventid'])
             flash('Registration removed', 'success')
-            return redirect(f'/event/{event}')
+            return redirect(f'/event/{event.eventid}')
     return render_template('user_event.html', userinfo=userinfo, eventinfo=eventinfo, organiserinfo=organiserinfo, participants=participants, others=others)
+
 
 

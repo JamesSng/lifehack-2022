@@ -18,9 +18,9 @@
 {% endwith %}
 </div>
 <div class="container-fluid row p-4">
-	<div class="col-4 p-4">
+	<div class="col-3 p-4">
 		<div class="row mb-3">
-			<div class="card shadow-sm p-0">
+			<div class="card shadow-sm p-0 unclickable-card">
 				<h4 class="card-header p-3"> {{profileinfo.name}}'s profile </h4>
 
 				<div class="card-body"><table class="table table-borderless table-sm">
@@ -36,10 +36,51 @@
 	</div>
 
 	<div class="col p-4">
-		{% if eventlist | length != 0 %} 
+		{% if eventlist | length != 0 and userinfo != None and userinfo.organiserid != None %} 
 		<div class="row mb-3">
 			<div class="col-5">
 				<h4>Volunteers' Ages</h4>
+				<div>
+					<div id="violin-chart" style="width:100%; height:auto;"></div>
+					<script>
+						var arr = []
+						{% for key in ages %}
+							for (let i=0;i<{{ages[key]}};i++) {
+								arr.push({{key}});
+							}
+						{% endfor %}
+
+						var data = [{
+							type: 'violin',
+							y: arr,
+							points: 'none',
+							box: {
+								visible: true
+							},
+							boxpoints: false,
+							line: {
+								color: 'black'
+							},
+							fillcolor: '#6ea8fe',
+							opacity: 0.6,
+							meanline: {
+								visible: true
+							},
+							x0: "Ages"
+						}]
+
+						var layout = {
+							title: "",
+							yaxis: {
+								zeroline: false
+							}
+						}
+						
+						console.log({{ages}})
+						console.log(arr);
+						Plotly.newPlot('violin-chart', data, layout);
+					</script>
+				</div>
 			</div>
 
 			<div class="col">
@@ -47,9 +88,9 @@
 				<div>
 					<canvas id="pie-chart" style="width:100%; height:auto;"> </canvas>
 					<script>
-						var labels = ["North", "South", "East", "West", "Central"]
+						const labels = ["North", "South", "East", "West", "Central"]
 						var data = [{{locations['North']}}, {{locations['South']}}, {{locations['East']}}, {{locations['West']}}, {{locations['Central']}}]
-						var bgcolor = ['Red', 'Blue', 'Green', 'Yellow', 'Purple']
+						const bgcolor = ['#0d6efd', '#dc3545', '#198754', '#ffc107', '#6f42c1']
 						const config = {
 							type: 'doughnut',
 							data:{
@@ -70,40 +111,44 @@
 		</div>
 		<div class="row">
 			<h4>Events Organised</h4>
+			<p>Click on an event to edit it.</p>
 			{% for event in eventlist %}
-			<div class="card shadow-sm p-0 m-3" style="width:25vw;">
+			<div class="card shadow-sm p-0 m-2" style="width:15vw;">
 				<h4 class="card-header p-2"> {{event.title}} </h4>
-				<img src="{{event.url}}">
 				<div class="card-body">
 					<table class="table table-borderless table-sm">
 					<tbody>
 					<tr>
-						<th scope="row"> Date </th>
+						<th scope="row" class="table-width-30"> Date </th>
 						<td> {{event.date}} </td>
 					</tr>
-					<tr>
-						<th scope="row"> Organiser </th>
-						<td> {{event.organiser}} </td>
-					</tr>
 					<tr>                                    
-						<th scope="row"> Type </th>
+						<th scope="row" class="table-width-30"> Type </th>
 						<td> {{event.type}} </td>
 					</tr>
 					<tr>                                    
-						<th scope="row"> Location </th>
+						<th scope="row" class="table-width-30"> Location </th>
 						<td> {{event.location}} </td>
 					</tr>
+					{% if userinfo != None %}
+					<tr>
+						<th scope="row" class="table-width-30"> # of Your Friends </th>
+						<td> {{event.numfriends}} </td>
+					</tr>
+					{% endif %}
 					</tbody>
 					</table>
-					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
+					<a href="/edit_event/{{event.eventid}}" class="stretched-link"></a>
 				</div>
 			</div>
 			{% endfor %}
 		</div>
+		
 		{% else %}
 		<h4>This organiser has no events :(</h4>
 		{% endif %}
 	</div>
 </div>
 {% endblock %}
+
 

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} Event {% endblock %} <!-- Title goes here -->
+{% block head %} {{ super() }} {% endblock %}
+
+{% block content %}
+<div class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+	{% if category != "compileError" %}
+	<div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
+		{{message | safe}}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+</div>
+<div class="container-fluid row p-4">
+	
+</div>
+{% endblock %}
+
+

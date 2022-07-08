@@ -30,8 +30,8 @@
 				<div class="carousel-item carousel-image-homepage active">
 					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290379948113/crop2.jpg" class="d-block w-100" alt="..." style="opacity:50%">
 				<div class="carousel-caption d-none d-md-block">
-						<h5>First slide label</h5>
-						<p>Some representative placeholder content for the first slide.</p>
+						<h3>Meet [app name].</h3>
+						<p>An all-in-one platform showcasing volunteering opportunities and experiences.</p>
 					{% if userinfo == None %}
 					<a role="button" class="btn btn-primary" href="/login">Sign in as Volunteer!</a>
 					<a role="button" class="btn btn-success" href="/org_login">Sign in as Organiser!</a>
@@ -41,15 +41,15 @@
 				<div class="carousel-item carousel-image-homepage">
 					<img src="https://media.discordapp.net/attachments/903191753086078997/994539290715496559/crop3.jpg" class="d-block w-100" alt="..." style="opacity:50%">
 					<div class="carousel-caption d-none d-md-block">
-						<h5>Second slide label</h5>
-						<p>Some representative placeholder content for the second slide.</p>
+						<h3>Join with one click.</h3>
+						<p>No hassle required to source and sign up for new volunteering events. Spend more time on the things that truly matter, instead of arduous searching and sign-up processes.</p>
 					</div>
 				</div>
 				<div class="carousel-item carousel-image-homepage">
 					<img src="https://media.discordapp.net/attachments/903191753086078997/994539289935355914/crop1.jpg" class="d-block w-100" alt="..." style="opacity:50%">
 					<div class="carousel-caption d-none d-md-block">
-						<h5>Third slide label</h5>
-						<p>Some representative placeholder content for the third slide.</p>
+						<h3>Know your audience.</h3>
+						<p>As an organiser, learn more about your volunteers and better engage people to join your events.</p>
 					</div>
 				</div>
 			</div>
@@ -199,11 +199,15 @@
 					<th scope="row" class="table-width-30"> Location </th>
 					<td> {{event.location}} </td>
 				</tr>
+				<tr>                                    
+					<th scope="row" class="table-width-30"> Recurring? </th>
+					<td> {% if event.num_occurrences > 1 %} Yes {% else %} No {% endif %} </td>
+				</tr>
 				{% if userinfo != None %}
 				<tr>
-                                        <th scope="row" class="table-width-30"> # of Your Friends </th>
-                                        <td> {{event.numfriends}} </td>
-                                </tr>
+					<th scope="row" class="table-width-30"> # of Your Friends </th>
+					<td> {{event.numfriends}} </td>
+				</tr>
 				{% endif %}
 				</tbody>
 				</table>
@@ -216,6 +220,7 @@
 </div>
 
 {% endblock %}
+
 
 
 
