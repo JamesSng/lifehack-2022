@@ -1,4 +1,5 @@
 from flask import render_template, redirect, request, flash
+from decimal import *
 import awstools
 
 def organiser_event(event):
@@ -29,11 +30,19 @@ def organiser_event(event):
         info['description'] = description
         info['date'] = date
         try:
-            info['hours'] = float(hours)
+            info['hours'] = Decimal(hours)
         except:
             info['hours'] = eventinfo['hours']
-            flash('Invalid duration format')
-        info['num_occurrences'] = num_occurrences
+            flash('Invalid duration format', 'warning')
+        try:
+            if int(num_occurrences) < 1:
+                info['num_occurrences'] = eventinfo['num_occurrences']
+                flash('Invalid value of number of occurrences', 'warning')
+            else:
+                info['num_occurrences'] = int(num_occurrences)
+        except:
+            info['num_occurrences'] = eventinfo['num_occurrences']
+            flash('Invalid number of occurrences format', 'warning')
         info['type'] = etype
         info['location'] = location
         info['url'] = url
