@@ -18,67 +18,87 @@
 	{% endwith %}
 </div>
 
-
 <div class="container-fluid col p-4">
 	<h2>  Blog Posts </h2>
 
-	<form id="filterform" action="" method="post" class="form-group">
-		<div class="input-group mb-3">
-			<input type="text" name="name" class="form-control" placeholder="Name" aria-label="Name" value="{{authorname}}">
-		</div>
-		<label><b>User Type:</b></label>
-		<div class="container col d-flex flex-column input-group mb-3">
-			<div>
-				<input class="form-check-input" type="radio" value="volunteer" aria-label="radio button for volunteer">
-				<b>Volunteer</b>
-			</div>
-			<div>
-				<input class="form-check-input" type="radio" value="organiser" aria-label="radio button for organiser">
-				<b>Organiser</b>
-			</div>
-		</div>
-		<label for="tags"><b>Tags:</b></label>
-		<div class="container col d-flex flex-column input-group mb-3">
-			<div>
-				<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 1" name="Children and Youth" {% if "Children and Youth" in request.form %} checked="" {% endif %}>
-				<b>Children and Youth</b>
-			</div>
+	<div class="accordion shadow-sm" id="accordionOne">
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="headingOne">
+				<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+					Filter Blog Posts
+				</button>
+			</h2>
+			<div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionOne">
+				<div class="accordion-body">
+					<form id="filterform" action="" method="post" class="form-group mb-3">
+						<div class="input-group mb-3">
+							<span class="input-group-text">Filter by Author:</span>
+							<select name="usertype" class="form-select" placeholder="Location" aria-label="Location" style="max-width:fit-content;">
+								<option value="All">All</option>
+								<option value="Volunteer">Volunteer</option>
+								<option value="Organiser">Organiser</option>
+							</select>
+							<input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" value="{{username}}">
+						</div>
+						<input class="form-check-input mb-3" type="checkbox" value="" aria-label="Checkbox for friends" name="friends" {% if "friends" in request.form %} checked {% endif %}>
+						<b>Only show friends' blogs</b>
 
-			<div>
-				<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 2" name="Seniors" {% if "Seniors" in request.form %} checked="" {% endif %}>
-				<b>Seniors</b>
-			</div>
-			<div>
-				<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 3" name="Environment" {% if "Environment" in request.form %} checked {% endif %} >
-				<b>Environment</b>
-			</div>
-			<div>
-				<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 4" name="Underprivileged" {% if "Underprivileged" in request.form %} checked {% endif %}>								
-				<b>Underprivileged</b>
-			</div>
-			<div>
-				<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 5" name="Arts and Heritage" {% if "Arts and Heritage" in request.form %} checked {% endif %}>
-				<b>Arts and Heritage</b>
-			</div>
-			<div>
-				<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 6" name="Personal" {% if "Personal" in request.form %} checked {% endif %}>
-				<b>Personal</b>
-			</div>
-			<div>
-				<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 7" name="Promotional" {%if "Promotional" in request.form %} checked {% endif %}>
-				<b>Promotional</b>
+						<div class="input-group mb-3">
+							<span class="input-group-text">Filter by Tags:</span>
+							<div class="input-group-text" style="background-color:white;">
+								<input class="form-check-input mt-0 me-2" type="checkbox" value="" aria-label="Checkbox for Tag 1" name="Children and Youth" {% if "Children and Youth" in tags %} checked {% endif %}>
+								Children and Youth
+							</div>
+							<div class="input-group-text" style="background-color:white;">
+								<input class="form-check-input mt-0 me-2" type="checkbox" value="" aria-label="Checkbox for Tag 2" name="Seniors" {% if "Seniors" in tags %} checked {% endif %}>
+								Seniors
+							</div>
+							<div class="input-group-text" style="background-color:white;">
+								<input class="form-check-input mt-0 me-2" type="checkbox" value="" aria-label="Checkbox for Tag 3" name="Environment" {% if "Environment" in tags %} checked {% endif %}>
+								Environment
+							</div>
+							<div class="input-group-text" style="background-color:white;">
+								<input class="form-check-input mt-0 me-2" type="checkbox" value="" aria-label="Checkbox for Tag 4" name="Underprivileged" {% if "Underprivileged" in tags %} checked {% endif %}>
+								Underprivileged
+							</div>
+							<div class="input-group-text" style="background-color:white;">
+								<input class="form-check-input mt-0 me-2" type="checkbox" value="" aria-label="Checkbox for Tag 5" name="Arts and Heritage" {% if "Arts and Heritage" in tags %} checked {% endif %}>
+								Arts and Heritage
+							</div>
+							<div class="input-group-text" style="background-color:#e7f1ff;">
+								<input class="form-check-input mt-0 me-2" type="checkbox" value="" aria-label="Checkbox for Tag 6" name="Personal" {% if "Personal" in tags %} checked {% endif %}>
+								Personal
+							</div>
+							<div class="input-group-text" style="background-color:#e7f1ff;">
+								<input class="form-check-input mt-0 me-2" type="checkbox" value="" aria-label="Checkbox for Tag 7" name="Promotional" {% if "Promotional" in tags %} checked {% endif %}>
+								Promotional
+							</div>
+						</div>
+						<div class="input-group mb-3">
+							<button type="submit" class="btn btn-primary">Filter</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
-		<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for friends" name="friends" {% if "friends" in request.form %} checked="" {% endif %}>
-		<b>Only show friends' blogs</b>
-	</form>
+	</div>
 
 	{% for post in posts %}
-	{% if post.published or (userinfo != None and userinfo.usertype == post.authortype and userinfo.name == post.authorname) %}
+	{% if post.published or (userinfo != None and userinfo.usertype == post.authortype and userinfo.username == post.authorid) %}
 	<hr>
 	<article id="post-{{post.blogid}}" class="post-{{post.blogid}} post type-post">
 		<header>
-			<h3><a href="/blog/{{post.blogid}}">{{post.title}} {% if not post.published %} (Unpublished) {% endif %}</a></h3>
+			<h3>
+				<a href="/blog/{{post.blogid}}">{{post.title}} {% if not post.published %} (Unpublished) {% endif %}</a>
+				{% if userinfo != None and (userinfo.usertype == 1 and userinfo.organiserid == post.authorid) or (userinfo.usertype == 0 and userinfo.username == post.authorid) %}
+				<a href="/edit_blog/{{post.blogid}}" role="button" class="btn btn-outline-primary ms-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+						<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+					</svg>
+					Edit Blog Post
+				</a>
+				{% endif %}
+			</h3>	
 		</header>
 		{% if post.url != None %}
 		<img src="{{post.url}}">

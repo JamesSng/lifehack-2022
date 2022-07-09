@@ -25,6 +25,10 @@ def organiser_event(event):
         location = result['location']
         url = result['url']
 
+        if not awstools.check_date(date):
+            flash('Invalid date format!', 'warning')
+            date = eventinfo['date']
+
         info = {}
         info['eventid'] = event
         info['title'] = title

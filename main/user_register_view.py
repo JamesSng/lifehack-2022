@@ -2,13 +2,6 @@ from flask import render_template, redirect, request, flash, get_flashed_message
 import awstools
 from datetime import datetime
 
-def check_date(date):
-    try:
-        datetime.strptime(date, '%d/%m/%Y')
-    except ValueError:
-        return False
-    return True
-
 def get_template():
     return render_template('user_register.html', userinfo=awstools.getCurrentUserInfo())
 
@@ -35,7 +28,7 @@ def user_register():
             return get_template()
         else:
             phone = int(phone)
-        if not check_date(birthdate):
+        if not awstools.check_date(birthdate):
             flash('Invalid birthdate!', 'warning')
             return get_template()
         if password != password2:

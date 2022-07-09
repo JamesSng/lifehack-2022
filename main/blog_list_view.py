@@ -2,6 +2,13 @@ from flask import render_template, redirect, request, flash
 import awstools
 
 def blog_list():
+    username = request.args.get('user')
+    usertype = request.args.get('usertype')
+    if usertype:
+        usertype = int(usertype)
+    tags = ""
+    friends = False
+
     userinfo = awstools.getCurrentUserInfo()
     posts = awstools.getAllBlogPosts()
     for post in posts:
@@ -13,5 +20,41 @@ def blog_list():
         newString = newString.replace('\n', '<br>')
         post['shortContent'] = newString
 
-    return render_template('blog_list.html', userinfo=userinfo, posts=posts)
+    if request.method == 'POST' or username or usertype:
+        result = request.form
+
+        if not username:
+            username = result['username']
+        if usertype == None:
+            if result['usertype'] == 'Volunteer':
+                usertype = [0]
+            elif result['usertype'] == 'Organiser':
+                usertype = [1]
+            else:
+                usertype = [0, 1]
+        else:
+            usertype = [usertype]
+        
+        tags = ""
+        for i in awstools.getBlogTags():
+            if i in result:
+                tags += i + " "
+        friends = 'friends' in result
+        
+        if username:
+            posts = [i for i in posts if username == i['authorid'] and int(i['authortype']) in usertype]
+        if tags:
+            newposts = []
+            for i in posts:
+                valid = True
+                for j in posts['tags'].split(','):
+                    if j.strip() not in tags:
+                        valid = False
+                if valid:
+                    newposts.append(i)
+            posts = newposts
+        if friends and userinfo != None and userinfo['usertype'] == 0:
+            posts = [i for i in posts if i['authortype'] == 0 and i['authorid'] in userinfo['friends']]
+
+    return render_template('blog_list.html', userinfo=userinfo, posts=posts, username=username, tags=tags, friends=friends)
 

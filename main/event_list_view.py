@@ -7,6 +7,7 @@ def event_list():
     for event in eventlist:
         info = awstools.getOrganiserInfo(event['organiser'])
         event['organiser'] = info['name']
+        event['organiserid'] = info['organiserid']
     tags = awstools.getEventTypes()
     if userinfo != None and userinfo['usertype'] == 0:
         data = awstools.getVolunteeringInterests(userinfo['username'])
@@ -18,6 +19,12 @@ def event_list():
 
         lowDate = result['lowDate']
         highDate = result['highDate']
+        if lowDate and not awstools.check_date(lowDate):
+            lowDate = ''
+            flash('Invalid lowDate format!', 'warning')
+        if highDate and not awstools.check_date(highDate):
+            highDate = ''
+            flash('Invalid highDate format!', 'warning')
         etype = result['etype']
         if etype == 'All':
             etype = None

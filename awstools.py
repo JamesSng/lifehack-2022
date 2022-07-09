@@ -29,76 +29,76 @@ def parseDate(dateString):
 def scan(table, ProjectionExpression = None, ExpressionAttributeNames = None, ExpressionAttributeValues = None):
     results = []
     if ProjectionExpression == None:
-       # No Expression Attribute Names
+        # No Expression Attribute Names
         resp = table.scan()
         results = results + resp['Items']
         while 'LastEvaluatedKey' in resp:
             resp = table.scan(
-                ExclusiveStartKey = resp['LastEvaluatedKey']
-            )
+                    ExclusiveStartKey = resp['LastEvaluatedKey']
+                    )
             results = results + resp['Items']
     elif ExpressionAttributeNames != None and ExpressionAttributeValues != None:
         resp = table.scan(
-            ProjectionExpression=ProjectionExpression,
-            ExpressionAttributeNames = ExpressionAttributeNames,
-            ExpressionAttributeValues = ExpressionAttributeValues
-        )
+                ProjectionExpression=ProjectionExpression,
+                ExpressionAttributeNames = ExpressionAttributeNames,
+                ExpressionAttributeValues = ExpressionAttributeValues
+                )
         results = results + resp['Items']
         while 'LastEvaluatedKey' in resp:
             resp = table.scan(
-                ProjectionExpression=ProjectionExpression,
-                ExpressionAttributeNames = ExpressionAttributeNames,
-                ExpressionAttributeValues = ExpressionAttributeValues,
-                ExclusiveStartKey = resp['LastEvaluatedKey']
-            )
+                    ProjectionExpression=ProjectionExpression,
+                    ExpressionAttributeNames = ExpressionAttributeNames,
+                    ExpressionAttributeValues = ExpressionAttributeValues,
+                    ExclusiveStartKey = resp['LastEvaluatedKey']
+                    )
             results = results + resp['Items']
 
     elif ExpressionAttributeNames != None:
         resp = table.scan(
-            ProjectionExpression=ProjectionExpression,
-            ExpressionAttributeNames = ExpressionAttributeNames,
-        )
+                ProjectionExpression=ProjectionExpression,
+                ExpressionAttributeNames = ExpressionAttributeNames,
+                )
         results = results + resp['Items']
         while 'LastEvaluatedKey' in resp:
             resp = table.scan(
-                ProjectionExpression=ProjectionExpression,
-                ExpressionAttributeNames = ExpressionAttributeNames,
-                ExclusiveStartKey = resp['LastEvaluatedKey']
-            )
+                    ProjectionExpression=ProjectionExpression,
+                    ExpressionAttributeNames = ExpressionAttributeNames,
+                    ExclusiveStartKey = resp['LastEvaluatedKey']
+                    )
             results = results + resp['Items']
     elif ExpressionAttributeValues != None:
         resp = table.scan(
-            ProjectionExpression=ProjectionExpression,
-            ExpressionAttributeValues = ExpressionAttributeValues
-        )
+                ProjectionExpression=ProjectionExpression,
+                ExpressionAttributeValues = ExpressionAttributeValues
+                )
         results = results + resp['Items']
         while 'LastEvaluatedKey' in resp:
             resp = table.scan(
-                ProjectionExpression=ProjectionExpression,
-                ExpressionAttributeValues = ExpressionAttributeValues,
-                ExclusiveStartKey = resp['LastEvaluatedKey']
-            )
+                    ProjectionExpression=ProjectionExpression,
+                    ExpressionAttributeValues = ExpressionAttributeValues,
+                    ExclusiveStartKey = resp['LastEvaluatedKey']
+                    )
             results = results + resp['Items']
     else:
         resp = table.scan(
-            ProjectionExpression=ProjectionExpression,
-        )
+                ProjectionExpression=ProjectionExpression,
+                )
         results = results + resp['Items']
         while 'LastEvaluatedKey' in resp:
             resp = table.scan(
-                ProjectionExpression=ProjectionExpression,
-                ExclusiveStartKey = resp['LastEvaluatedKey']
-            )
+                    ProjectionExpression=ProjectionExpression,
+                    ExclusiveStartKey = resp['LastEvaluatedKey']
+                    )
             results = results + resp['Items']
     return results
 
 def getAllVolunteers():
-	value = scan(volunteers_table)
-	return value
+    value = scan(volunteers_table)
+    return value
 
 def getAllOrganisers():
-	value = scan(organisers_table)
-	return value
+    value = scan(organisers_table)
+    return value
 
 def getAllEvents():
     value = scan(events_table)
@@ -139,48 +139,48 @@ def getFilteredEvents(lowDate=None, highDate=None, etype=None, friends=False, te
     return events
 
 def getVolunteerInfo(username):
-	response = volunteers_table.query(
-		KeyConditionExpression = Key('username').eq(username)
-	)
-	info = response['Items']
-	if len(info) != 1:
-		return "This volunteer doesn't exist"
-	return info[0]
+    response = volunteers_table.query(
+            KeyConditionExpression = Key('username').eq(username)
+            )
+    info = response['Items']
+    if len(info) != 1:
+        return "This volunteer doesn't exist"
+    return info[0]
 
 def getOrganiserInfo(organiserid):
-	response = organisers_table.query(
-		KeyConditionExpression = Key('organiserid').eq(organiserid)
-	)
-	info = response['Items']
-	if len(info) != 1:
-		return "This organiser doesn't exist"
-	return info[0]
+    response = organisers_table.query(
+            KeyConditionExpression = Key('organiserid').eq(organiserid)
+            )
+    info = response['Items']
+    if len(info) != 1:
+        return "This organiser doesn't exist"
+    return info[0]
 
 def getEventInfo(eventid):
-	response = events_table.query(
-		KeyConditionExpression = Key('eventid').eq(eventid)
-	)
-	info = response['Items']
-	if len(info) != 1:
-		return "This event doesn't exist"
-	return info[0]
+    response = events_table.query(
+            KeyConditionExpression = Key('eventid').eq(eventid)
+            )
+    info = response['Items']
+    if len(info) != 1:
+        return "This event doesn't exist"
+    return info[0]
 
 def getBlogInfo(blogid):
-	response = blog_table.query(
-		KeyConditionExpression = Key('blogid').eq(int(blogid))
-	)
-	info = response['Items']
-	if len(info) != 1:
-		return "This blog doesn't exist"
-	return info[0]
+    response = blog_table.query(
+            KeyConditionExpression = Key('blogid').eq(int(blogid))
+            )
+    info = response['Items']
+    if len(info) != 1:
+        return "This blog doesn't exist"
+    return info[0]
 
 def updateVolunteerInfo(username, info):
     volunteers_table.update_item(
-        Key = {'username': username},
-        UpdateExpression = f'set birthdate=:b, events=:d, friends=:e, #g=:g, #h=:h, phone=:i, password=:j',
-        ExpressionAttributeValues = {':b':info['birthdate'], ':d':info['events'], ':e':info['friends'], ':g':info['location'], ':h':info['name'], ':i':info['phone'], ':j':info['password']},
-        ExpressionAttributeNames = {'#g':'location', '#h':'name'}
-    )
+            Key = {'username': username},
+            UpdateExpression = f'set birthdate=:b, events=:d, friends=:e, #g=:g, #h=:h, phone=:i, password=:j',
+            ExpressionAttributeValues = {':b':info['birthdate'], ':d':info['events'], ':e':info['friends'], ':g':info['location'], ':h':info['name'], ':i':info['phone'], ':j':info['password']},
+            ExpressionAttributeNames = {'#g':'location', '#h':'name'}
+            )
 
 def createVolunteer(name, username, phone, birthdate, location, password):
     info = {}
@@ -195,12 +195,12 @@ def createVolunteer(name, username, phone, birthdate, location, password):
     updateVolunteerInfo(username, info)
 
 def updateOrganiserInfo(organiserid, info):
-	organisers_table.update_item(
-        Key = {'organiserid': organiserid},
-        UpdateExpression = f'set #a=:a, bio=:b, events=:c, password=:d',
-        ExpressionAttributeValues = {':a':info['name'], ':b':info['bio'], ':c':info['events'], ':d':info['password']},
-        ExpressionAttributeNames = {'#a':'name'}
-    )
+    organisers_table.update_item(
+            Key = {'organiserid': organiserid},
+            UpdateExpression = f'set #a=:a, bio=:b, events=:c, password=:d',
+            ExpressionAttributeValues = {':a':info['name'], ':b':info['bio'], ':c':info['events'], ':d':info['password']},
+            ExpressionAttributeNames = {'#a':'name'}
+            )
 
 def createOrganiser(name, username, bio, password):
     info = {}
@@ -212,11 +212,11 @@ def createOrganiser(name, username, bio, password):
     updateOrganiserInfo(username, info)
 
 def updateEventInfo(eventid, info):
-	events_table.update_item(
-        Key = {'eventid': eventid},
-        UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, #j=:j, #k=:k, resources=:l',
-        ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants'], ':f':info['hours'], ':g':info['location'], ':h':info['description'], ':i':info['title'], ':j':info['type'], ':k':info['url'], ':l':info['resources']},
-        ExpressionAttributeNames = {'#b':'date', '#g':'location', '#j':'type', '#k':'url'}
+    events_table.update_item(
+            Key = {'eventid': eventid},
+            UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, #j=:j, #k=:k, resources=:l',
+            ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants'], ':f':info['hours'], ':g':info['location'], ':h':info['description'], ':i':info['title'], ':j':info['type'], ':k':info['url'], ':l':info['resources']},
+            ExpressionAttributeNames = {'#b':'date', '#g':'location', '#j':'type', '#k':'url'}
     )
 
 def publishBlog(blogid):
@@ -237,11 +237,11 @@ def updateBlogInfo(blogid, info):
     else:
         unpublishBlog(int(blogid))
     blog_table.update_item(
-        Key = {'blogid': int(blogid)},
-        UpdateExpression = f'set authorid=:a, authorname=:b, authortype=:c, content=:d, #e=:e, published=:f, tags=:g, title=:h, #i=:i, comments=:j',
-        ExpressionAttributeValues = {':a':info['authorid'], ':b':info['authorname'], ':c':info['authortype'], ':d':info['content'], ':e':info['date'], ':f':info['published'], ':g':info['tags'], ':h':info['title'], ':i':info['url'], ':j':info['comments']},
-        ExpressionAttributeNames = {'#e':'date', '#i':'url'}
-    )
+            Key = {'blogid': int(blogid)},
+            UpdateExpression = f'set authorid=:a, authorname=:b, authortype=:c, content=:d, #e=:e, published=:f, tags=:g, title=:h, #i=:i, comments=:j',
+            ExpressionAttributeValues = {':a':info['authorid'], ':b':info['authorname'], ':c':info['authortype'], ':d':info['content'], ':e':info['date'], ':f':info['published'], ':g':info['tags'], ':h':info['title'], ':i':info['url'], ':j':info['comments']},
+            ExpressionAttributeNames = {'#e':'date', '#i':'url'}
+            )
 
 def hashPassword(password):
     hh = sha256()
@@ -310,6 +310,22 @@ def addEventToOrganiser(organiserid, eventid):
     if eventid not in userinfo['events']:
         userinfo['events'].append(eventid)
     updateOrganiserInfo(organiserid, userinfo)
+
+def createEventFromId(eventid, organiserid):
+    info = {}
+    info['date'] = ''
+    info['num_occurrences'] = ''
+    info['organiser'] = organiserid
+    info['participants'] = []
+    info['hours'] = ''
+    info['location'] = ''
+    info['description'] = ''
+    info['title'] = eventid
+    info['type'] = ''
+    info['url'] = ''
+    info['resources'] = ''
+    updateEventInfo(eventid, info)
+    addEventToOrganiser(organiserid, eventid)
 
 def removeEventFromOrganiser(organiserid, eventid):
     userinfo = getOrganiserInfo(organiserid)
@@ -426,7 +442,7 @@ def processAnalytics(eventids):
         if location not in locations:
             locations[location] = 0
         locations[location] += 1
-    
+
     return ages, locations
 
 def getOrganiserAnalytics(organiserid):
@@ -444,28 +460,36 @@ def uploadEventResource(files, eventid):
     s3.upload_fileobj(files, MATERIALS_BUCKET_NAME, f'{eventid}.zip', ExtraArgs={"ACL": 'public-read', "ContentType":files.content_type})
 
 def getPublishedBlogs():
-	response = misc_table.query(
-		KeyConditionExpression = Key('item').eq('publishedblogs')
-	)
-	info = response['Items']
-	if len(info) != 1:
-		return []
-	return info[0]['blogs']
+    response = misc_table.query(
+            KeyConditionExpression = Key('item').eq('publishedblogs')
+            )
+    info = response['Items']
+    if len(info) != 1:
+        return []
+    return info[0]['blogs']
 
 def updatePublishedBlogs(blogs):
     misc_table.update_item(
-        Key = {'item': 'publishedblogs'},
-        UpdateExpression = f'set blogs=:a',
-        ExpressionAttributeValues = {':a':blogs}
-    )
+            Key = {'item': 'publishedblogs'},
+            UpdateExpression = f'set blogs=:a',
+            ExpressionAttributeValues = {':a':blogs}
+            )
 
 def getNextBlogId():
     res = lambda_client.invoke(
-        FunctionName = 'arn:aws:lambda:us-west-2:669016928924:function:next-blog-id',
-        InvocationType = 'RequestResponse'
-    )
+            FunctionName = 'arn:aws:lambda:us-west-2:669016928924:function:next-blog-id',
+            InvocationType = 'RequestResponse'
+            )
     blog_index = json.load(res["Payload"])
     return blog_index['blogId']
+
+def check_date(date):
+    try:
+        datetime.strptime(date, '%d/%m/%Y')
+    except ValueError:
+        return False
+    return True
+
 
 if __name__ == '__main__':
     pass
