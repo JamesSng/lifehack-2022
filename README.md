@@ -17,3 +17,12 @@ Visit [http://35.89.21.87/](http://35.89.21.87/) in a new browser tab/window. Yo
 - Step 1: Click Code > Download ZIP to download a zip file of the source code, then extract the files to your desired folder.
 - Step 2: In the terminal, navigate to the root folder and run `sh pip_install.sh` to install the dependencies for the project.
 - Step 3: Run `sudo python3 app.py` in the same folder (key in your password if necessary) and visit the IP address as indicated by the output of this command.
+
+## Login Instructions
+
+You may register your own new Volunteer/Organiser accounts to test our features. Alternatively, you may use the following credentials:
+
+- Volunteer account: Username, Password
+- Organiser account: Username, Password
+
+Some parts of the site can also be accessed as an anonymous user.
