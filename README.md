@@ -1,10 +1,11 @@
 # EN-Volunteers
 by Sadfaces for Lifehack 2022
 
-Problem Statement: Question 1
-Volunteering is one of the best ways to give back to our community. What creative ideas do you have to make volunteering easier, widespread, and more beneficial to those in need?
+## Theme: Giving Back
 
-Theme: Giving Back
+Problem Statement: Question 1
+
+Volunteering is one of the best ways to give back to our community. What creative ideas do you have to make volunteering easier, widespread, and more beneficial to those in need?
 
 ## Instructions on Accessing EN-Volunteers
 ### Method 1: IP Address
