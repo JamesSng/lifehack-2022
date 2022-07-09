@@ -12,6 +12,11 @@ dynamodb = boto3.resource('dynamodb')
 volunteers_table = dynamodb.Table('volunteers')
 organisers_table = dynamodb.Table('organisers')
 events_table = dynamodb.Table('events')
+blog_table = dynamodb.Table('blog')
+
+s3 = boto3.client('s3', 'us-west-2')
+s3_resources = boto3.resource('s3')
+MATERIALS_BUCKET_NAME = 'lifehack-materials'
 
 def parseDate(dateString):
     return datetime.strptime(dateString, '%d/%m/%Y')
@@ -93,6 +98,10 @@ def getAllOrganisers():
 
 def getAllEvents():
     value = scan(events_table)
+    return value
+
+def getAllBlogPosts():
+    value = scan(blog_table)
     return value
 
 def getAllEventsFriends():
@@ -345,7 +354,7 @@ def getVolunteeringHours(username):
             datestr = date.strftime('%Y-%m-%d')
             if datestr not in dates:
                 dates[datestr] = 0
-            dates[datestr] += float(eventinfo['hours'])
+            dates[datestr] += eventinfo['hours']
             date += timedelta(days = 7)
             if date > now:
                 break
@@ -388,5 +397,9 @@ def getOrganiserAnalytics(organiserid):
 def getEventAnalytics(eventid):
     return processAnalytics([eventid])
 
+def uploadEventResource(files, eventid):
+    s3.upload_fileobj(files, MATERIALS_BUCKET_NAME, f'{eventid}.zip')
+
 if __name__ == '__main__':
     print(getEventsFromOrganiser('singaporezoo'))
+

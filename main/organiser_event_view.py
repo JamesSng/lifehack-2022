@@ -14,6 +14,7 @@ def organiser_event(event):
 
     if request.method == 'POST':
         result = request.form
+        files = request.files
         
         title = result['title']
         description = result['description']
@@ -32,16 +33,16 @@ def organiser_event(event):
         try:
             info['hours'] = Decimal(hours)
         except:
-            info['hours'] = eventinfo['hours']
+            info['hours'] = Decimal(eventinfo['hours'])
             flash('Invalid duration format', 'warning')
         try:
             if int(num_occurrences) < 1:
-                info['num_occurrences'] = eventinfo['num_occurrences']
+                info['num_occurrences'] = int(eventinfo['num_occurrences'])
                 flash('Invalid value of number of occurrences', 'warning')
             else:
                 info['num_occurrences'] = int(num_occurrences)
         except:
-            info['num_occurrences'] = eventinfo['num_occurrences']
+            info['num_occurrences'] = int(eventinfo['num_occurrences'])
             flash('Invalid number of occurrences format', 'warning')
         info['type'] = etype
         info['location'] = location
@@ -49,6 +50,16 @@ def organiser_event(event):
         info['organiser'] = userinfo['organiserid']
         info['participants'] = eventinfo['participants']
         awstools.updateEventInfo(event, info)
+
+        print(files)
+        if 'resources' not in files or files['resources'].filename == '':
+            flash('Resources not found', 'warning')
+        elif '.' not in files['resources'].filename or files['resources'].filename.rsplit('.', 1)[1].lower() != 'zip':
+            flash('Invalid file format', 'warning')
+        else:
+            awstools.uploadEventResource(files['resources'], event)
+            flash('Resources uploaded!', 'success')
+
         return redirect(f'/edit_event/{event}')
 
     return render_template('organiser_event.html', userinfo=userinfo, eventinfo=eventinfo, participants=participants)

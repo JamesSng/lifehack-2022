@@ -7,8 +7,8 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
-
 import enchant
+import math
 
 def pos_tagger(nltk_tag):
     if nltk_tag.startswith('J'):
@@ -60,16 +60,43 @@ def tokenize_text(text):
 def get_events():
     events = awstools.getAllEvents() 
     arr = []
-    model = gensim.models.KeyedVectors.load_word2vec_format('model/GoogleNews-vectors-negative300.bin', binary=True)
-    #for event in events:
-        #words = tokenize_text(event['description'])
-        #for word in words:
-            #print(model[word])
-        #arr.append([event['eventid'], event['description'], )
-    #df = pd.DataFrame(arr, columns=['id', 'description', 'vector'])
-    #print(df)
+    model = gensim.models.KeyedVectors.load_word2vec_format('model/GoogleNews-vectors-negative300.bin', binary=True, limit=50000)
+    for event in events:
+        text = clean_text(event['description'])
+        words = tokenize_text(text)
+        vector = [0] * 300
+        sze = 0
+        for word in words:
+            if word in model:
+                tmp = model[word]
+                sze += 1
+                for i in range(len(tmp)):
+                    vector[i] += tmp[i]
+        for i in range(300):
+            vector[i] /= sze
+        arr.append([event['eventid'], event['description'], vector])
+    df = pd.DataFrame(arr, columns=['id', 'description', 'vector'])
+    df = df.set_index('id')
+    print(df)
+    return df
+
+
+def suggest_similar(eventid):
+    df = get_events()
+    lst = []
+    for index, row in df.iterrows():
+        if index == eventid:
+            continue
+        dist = math.dist(df.loc[eventid, 'vector'], row['vector'])
+        lst.append((dist,index))
+    lst.sort()
+    names = []
+    for x in lst:
+        names.append(x[1])
+    return names
+
 
 
 if __name__ == '__main__':
-    get_events()
+    print(suggest_similar('beach_cleaning_1'))
 

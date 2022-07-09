@@ -53,12 +53,6 @@
 							<th scope="row"> Number of Occurrences </th>
 							<td> {{eventinfo.num_occurrences}} </td>
 						</tr>
-						{% if userinfo != None and userinfo['usertype'] == 0 %}
-						<tr>
-						<th scope="row" class="table-width-30"> # of Your Friends </th>
-						<td> {{eventinfo.numfriends}} </td>
-						</tr>
-						{% endif %}
 					</tbody></table>
 					<form id="registerform" action="" method="post" class="form-group">
 						{% if userinfo != None and userinfo.usertype == 0 %}
@@ -69,8 +63,55 @@
 						{% endif %}
 						{% endif %}
 					</form>
+					<br>
+					<a role="button" class="btn btn-outline-secondary">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-megaphone" viewBox="0 0 16 16">
+							<path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0v-.214c-2.162-1.241-4.49-1.843-6.912-2.083l.405 2.712A1 1 0 0 1 5.51 15.1h-.548a1 1 0 0 1-.916-.599l-1.85-3.49a68.14 68.14 0 0 0-.202-.003A2.014 2.014 0 0 1 0 9V7a2.02 2.02 0 0 1 1.992-2.013 74.663 74.663 0 0 0 2.483-.075c3.043-.154 6.148-.849 8.525-2.199V2.5zm1 0v11a.5.5 0 0 0 1 0v-11a.5.5 0 0 0-1 0zm-1 1.35c-2.344 1.205-5.209 1.842-8 2.033v4.233c.18.01.359.022.537.036 2.568.189 5.093.744 7.463 1.993V3.85zm-9 6.215v-4.13a95.09 95.09 0 0 1-1.992.052A1.02 1.02 0 0 0 1 7v2c0 .55.448 1.002 1.006 1.009A60.49 60.49 0 0 1 4 10.065zm-.657.975 1.609 3.037.01.024h.548l-.002-.014-.443-2.966a68.019 68.019 0 0 0-1.722-.082z"/>
+						</svg>
+						Promote on Blog!
+                    			</a>
+					<button id="share-modal-button" type="button" class="btn btn-outline-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share-fill" viewBox="0 0 16 16">
+							<path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+						</svg>
+						Share with others!
+					</button>
+					<div id="modal" class="modal">
+						<div class="modal-content">
+							<div class="modal-header">
+							    <h2 class="p-2">Sharing Options</h2>
+							    <span class="close">&times;</span>
+							</div>
+							<div class="modal-body">
+								<a href="http://web.whatsapp.com/send?text=http://35.89.21.87/event/{{eventinfo.eventid}}%20Check%20out%20this%20volunteering%20event!" data-original-title="whatsapp" rel="tooltip" class="btn btn-primary" style="border-width: 0; background-color: #25D366;" data-placement="left">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+										<path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+									</svg>
+									Share
+								</a>
+								<script class="btn" async src="https://telegram.org/js/telegram-widget.js?19" data-telegram-share-url="http://35.89.21.87/event/{{eventinfo.eventid}}" data-comment="Check out this volunteering event!" data-size="large"></script>
+							</div>
+						</div>
+					</div>
+					<script>
+						var modal = document.getElementById("modal");
+						var btn = document.getElementById("share-modal-button");
+						var span = document.getElementsByClassName("close")[0];
+						btn.onclick = function() {
+							modal.style.display = "block";
+						}
+						span.onclick = function() {
+							modal.style.display = "none";
+						}
+						window.onclick = function(event) {
+							if (event.target == modal) {
+								modal.style.display = "none";
+							}
+						}
+                    </script>
 				</div>
 			</div>
+
 			<div class="row card shadow-sm p-0 unclickable-card">
 				<h4 class="card-header p-3"> Participants </h4>
 
@@ -93,7 +134,7 @@
 
 	<div class="row overflow-auto p-4 d-flex flex-row justify-content-center">
 		<hr>
-		<h4 style="text-align:center;">Other events by organiser</h4>
+		<h2 style="text-align:center;">Other events by organiser</h2>
 
 		{% for event in others %}
 		<div class="card shadow-sm p-0 m-3" style="width:25vw;">
@@ -103,7 +144,7 @@
 				<tbody>
 				<tr>
 					<th scope="row" class="table-width-30"> Date </th>
-					<td> {{event.date}} </td>
+					<td> {{event.date}} </tdii`
 				</tr>
 				<tr>                                    
 					<th scope="row" class="table-width-30"> Type </th>
