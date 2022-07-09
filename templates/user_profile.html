@@ -149,32 +149,34 @@
 			<h4>Volunteering History</h4>
 			{% for event in eventlist %}
 			<div class="card shadow-sm p-0 m-2" style="width:15vw;">
-				<h4 class="card-header p-2"> {{event.title}} </h4>
-				<div class="card-body">
-					<table class="table table-borderless table-sm">
-					<tbody>
-					<tr>
-						<th scope="row" class="table-width-30"> Date </th>
-						<td> {{event.date}} </td>
-					</tr>
-					<tr>
-						<th scope="row" class="table-width-30"> Organiser </th>
-						<td> {{event.organiser}} </td>
-					</tr>
-					<tr>                                    
-						<th scope="row" class="table-width-30"> Type </th>
-						<td> {{event.type}} </td>
-					</tr>
-					<tr>                                    
-						<th scope="row" class="table-width-30"> Location </th>
-						<td> {{event.location}} </td>
-					</tr>
-					</tbody>
-					</table>
-					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
-				</div>
+			<h4 class="card-header p-2"> {{event.title}} </h4>
+			<div class="card-body">
+				<table class="table table-borderless table-sm">
+				<tbody>
+				<tr>
+					<th scope="row" class="table-width-30"> Date </th>
+					<td> {{event.date}} </td>
+				</tr>
+				<tr>
+					<th scope="row" class="table-width-30"> Organiser </th>
+					<td> <a class="priority-link" href="/org_profile/{{event.organiserid}}">{{event.organiser}}</a> </td>
+				</tr>
+				<tr>                                    
+					<th scope="row" class="table-width-30"> Type </th>
+					<td> {{event.type}} </td>
+				</tr>
+				<tr>                                    
+					<th scope="row" class="table-width-30"> Location </th>
+					<td> {{event.location}} </td>
+				</tr>
+				</tbody>
+				</table>
+				<a href="/event/{{event.eventid}}" class="stretched-link"></a>
 			</div>
-			{% endfor %}
+		</div>
+
+		{% endfor %}
+
 		</div>
 		{% else %}
 		<h4>This user has not volunteered for any events :(</h4>

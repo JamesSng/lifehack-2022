@@ -1,5 +1,6 @@
 from flask import render_template, redirect, request, flash
 import awstools
+from datetime import datetime, timedelta
 
 def user_event(event):
     userinfo = awstools.getCurrentUserInfo()
@@ -24,6 +25,17 @@ def user_event(event):
             if i not in sort_participants:
                 sort_participants.append(i)
 
+    date = datetime.strptime(eventinfo['date'], '%d/%m/%Y')
+    for i in range(int(eventinfo['num_occurrences'])):
+        if i != eventinfo['num_occurrences'] - 1:
+            date += timedelta(days = 7)
+            if date > datetime.now():
+                break
+    if date > datetime.now():
+        next_occurrence = date.strftime('%d/%m/%Y')
+    else:
+        next_occurrence = 'Event has passed'
+
     others = awstools.getEventsFromOrganiser(eventinfo['organiser'])
     others = [i for i in others if i != eventinfo]
     for event2 in others:
@@ -38,7 +50,4 @@ def user_event(event):
             awstools.removeEventFromVolunteer(userinfo['username'], eventinfo['eventid'])
             flash('Registration removed', 'success')
             return redirect(f'/event/{event}')
-    return render_template('user_event.html', userinfo=userinfo, eventinfo=eventinfo, organiserinfo=organiserinfo, participants=sort_participants, others=others)
-
-
-
+    return render_template('user_event.html', userinfo=userinfo, eventinfo=eventinfo, organiserinfo=organiserinfo, participants=sort_participants, others=others, next_occurrence=next_occurrence)

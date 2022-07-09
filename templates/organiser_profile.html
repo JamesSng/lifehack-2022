@@ -46,7 +46,7 @@
 		{% if eventlist | length != 0 %} 
 		<div class="row mb-3">
 			<div class="col-5">
-				<h4>Volunteers' Ages</h4>
+				<h3>Volunteers' Ages</h3>
 				<div>
 					<div id="violin-chart" style="width:100%; height:auto;"></div>
 					<script>
@@ -91,7 +91,7 @@
 			</div>
 
 			<div class="col">
-				<h4>Volunteers' Residential Locations</h4>
+				<h3>Volunteers' Residential Locations</h3>
 				<div>
 					<canvas id="pie-chart" style="width:100%; height:auto;"> </canvas>
 					<script>
@@ -117,48 +117,51 @@
 			</div>
 		</div>
 		<div class="row">
-			<h4>Events Organised</h4>
+			<hr>
+			<h3>Events Organised</h3>
 			{% if userinfo != None and userinfo['usertype'] == 1 and userinfo['organiserid'] == profileinfo['organiserid'] %}
-			<p>Click on an event to edit it.</p>
-			<form id="createeventform" action="" method="post" class="form-group">
+			<form id="createeventform" action="" method="post" class="form-group w-50">
 				<div class="input-group mb-3">
 					<input type="text" name="eventid" class="form-control" placeholder="Event ID" aria-label="Event ID">
-					<button type="submit" class="btn btn-primary">Create Event</button>
+					<button type="submit" class="btn btn-primary">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
+  							<path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7z"/>
+  							<path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+						</svg>
+						Create Event
+					</button>
 				</div>
 			</form>
+			<p>Click on an event to edit it.</p>
 			{% endif %}
+		</div>
+		<div class="row overflow-auto">
 			{% for event in eventlist %}
 			<div class="card shadow-sm p-0 m-2" style="width:15vw;">
-				<h4 class="card-header p-2"> {{event.title}} </h4>
-				<div class="card-body">
-					<table class="table table-borderless table-sm">
-					<tbody>
-					<tr>
-						<th scope="row" class="table-width-30"> Date </th>
-						<td> {{event.date}} </td>
-					</tr>
-					<tr>                                    
-						<th scope="row" class="table-width-30"> Type </th>
-						<td> {{event.type}} </td>
-					</tr>
-					<tr>                                    
-						<th scope="row" class="table-width-30"> Location </th>
-						<td> {{event.location}} </td>
-					</tr>
-					{% if userinfo != None and userinfo['usertype'] == 0 %}
-					<tr>
-						<th scope="row" class="table-width-30"> # of Your Friends </th>
-						<td> {{event.numfriends}} </td>
-					</tr>
-					{% endif %}
-					</tbody>
-					</table>
+			<h4 class="card-header p-2"> {{event.title}} </h4>
+			<div class="card-body">
+				<table class="table table-borderless table-sm">
+				<tbody>
+				<tr>
+					<th scope="row" class="table-width-30"> Date </th>
+					<td> {{event.date}} </td>
+				</tr>
+				<tr>
+					<th scope="row" class="table-width-30"> Type </th>
+					<td> {{event.type}} </td>
+				</tr>
+				<tr>
+					<th scope="row" class="table-width-30"> Location </th>
+					<td> {{event.location}} </td>
+				</tr>
+				</tbody>
+				</table>
 					{% if userinfo != None and userinfo['usertype'] == 1 and userinfo['organiserid'] == profileinfo['organiserid'] %}
 					<a href="/edit_event/{{event.eventid}}" class="stretched-link"></a>
 					{% else %}
 					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
 					{% endif %}
-				</div>
+			</div>
 			</div>
 			{% endfor %}
 		</div>

@@ -53,6 +53,10 @@
 							<th scope="row"> Number of Occurrences </th>
 							<td> {{eventinfo.num_occurrences}} </td>
 						</tr>
+						<tr>
+							<th scope="row"> Next Occurrence </th>
+							<td> {{next_occurrence}} </td>
+						</tr>
 					</tbody></table>
 					<button class="btn btn-link" onclick="window.open('https://lifehack-materials.s3.us-west-2.amazonaws.com/{{eventinfo.eventid}}.zip')"> Download Resources </button>
 					<form id="registerform" action="" method="post" class="form-group">

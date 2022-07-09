@@ -72,12 +72,12 @@ def get_events():
                 sze += 1
                 for i in range(len(tmp)):
                     vector[i] += tmp[i]
-        for i in range(300):
-            vector[i] /= sze
+        if sze > 0:
+            for i in range(300):
+                vector[i] /= sze
         arr.append([event['eventid'], event['description'], vector])
     df = pd.DataFrame(arr, columns=['id', 'description', 'vector'])
     df = df.set_index('id')
-    print(df)
     return df
 
 
@@ -96,6 +96,28 @@ def suggest_similar(eventid):
     return names
 
 def suggest_user(userid):
+    arr = [x['eventid'] for x in awstools.getEventsFromVolunteer(userid)]
+    df = get_events()
+    lst = []
+    for index, row in df.iterrows():
+        if index in arr:
+            continue;
+        mn = 1000000005
+        for event in arr:
+            dist = math.dist(row['vector'], df.loc[event, 'vector'])
+            print(index, event, dist)
+            mn = min(mn, dist)
+        print(index, mn)
+        lst.append((mn, index))
+    lst.sort()
+    names = []
+    for x in lst:
+        names.append(x[1])
+    return names
+        
+
+"""
+def suggest_user(userid):
     arr=[x['eventid'] for x in awstools.getEventsFromVolunteer(userid)]
     df=get_events()
     
@@ -103,7 +125,6 @@ def suggest_user(userid):
     names=[]
     for index,row in df.iterrows():
         if index in arr:
-            print(index)
             for i in range(300):
                 vector[i]+=row['vector'][i]
         else:
@@ -122,7 +143,9 @@ def suggest_user(userid):
     for x in lst:
         names.append(x[1])
     return names
+"""
 
 if __name__ == '__main__':
-    print(suggest_user('tiashiting'))
+    username = input('Username: ')
+    print(suggest_user(username))
 

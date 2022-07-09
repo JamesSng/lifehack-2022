@@ -13,7 +13,7 @@ def blog_list():
     posts = awstools.getAllBlogPosts()
     for post in posts:
         newString = post['content'][:min(500, len(post['content']))]
-        while not newString[-1].isspace():
+        while newString and not newString[-1].isspace():
             newString = newString[:-1]
         if len(newString) != len(post['content']):
             newString += "[...]"
@@ -22,6 +22,14 @@ def blog_list():
 
     if request.method == 'POST' or username or usertype:
         result = request.form
+
+        if 'create' in result:
+            blogid = awstools.getNextBlogId()
+            username = userinfo['username'] if userinfo['usertype'] == 0 else userinfo['organiserid']
+            usertype = userinfo['usertype']
+            name = userinfo['name']
+            awstools.createBlogFromId(blogid, username, usertype, name)
+            return redirect(f'/edit_blog/{blogid}')
 
         if not username:
             username = result['username']

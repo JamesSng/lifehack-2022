@@ -9,6 +9,9 @@ def user_profile(user):
     awstools.getVolunteeringHours(user)
     eventlist = awstools.getEventsFromVolunteer(user)
     friends = awstools.getFriendsFromVolunteer(user)
+    for i in eventlist:
+        i['organiserid'] = i['organiser']
+        i['organiser'] = awstools.getOrganiserInfo(i['organiserid'])['name']
     if request.method == 'POST':
         if profileinfo['username'] not in userinfo['friends']:
             awstools.addFriend(userinfo['username'], profileinfo['username'])

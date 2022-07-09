@@ -243,6 +243,21 @@ def updateBlogInfo(blogid, info):
             ExpressionAttributeNames = {'#e':'date', '#i':'url'}
             )
 
+def createBlogFromId(blogid, username, usertype, name):
+    info = {}
+    info['blogid'] = blogid
+    info['authorid'] = username
+    info['authortype'] = usertype
+    info['authorname'] = name
+    info['date'] = datetime.now().strftime('%d/%m/%Y')
+    info['published'] = False
+    info['tags'] = ''
+    info['title'] = ''
+    info['url'] = ''
+    info['comments'] = []
+    info['content'] = ''
+    updateBlogInfo(blogid, info)
+
 def hashPassword(password):
     hh = sha256()
     hh.update(password.encode('utf-8'))
@@ -347,6 +362,8 @@ def removeFriend(username, friend):
 
 def getEventsFromVolunteer(username):
     userinfo = getVolunteerInfo(username)
+    if type(userinfo) == str:
+        return []
     eventids = userinfo['events']
     events = []
     for event in eventids:
@@ -355,6 +372,8 @@ def getEventsFromVolunteer(username):
 
 def getEventsFromOrganiser(username):
     userinfo = getOrganiserInfo(username)
+    if type(userinfo) == str:
+        return []
     eventids = userinfo['events']
     events = []
     for event in eventids:
