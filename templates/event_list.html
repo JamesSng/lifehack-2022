@@ -78,7 +78,7 @@
 				</tr>
 				<tr>                                    
 					<th scope="row" class="table-width-30"> Recurring? </th>
-					<td> {% if event.num_occurrences > 1 %} Yes {% else %} No {% endif %} </td>
+					<td> {% if event.num_occurrences|int > 1 %} Yes {% else %} No {% endif %} </td>
 				</tr>
 				{% if userinfo != None and userinfo['usertype'] == 0 %}
 				<tr>

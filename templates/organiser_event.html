@@ -25,32 +25,32 @@
 				<h4 class="card-header p-3"> Editing {{eventinfo.eventid}} </h4>
 				<div class="card-body">
 					<form id="editform" action="" method="post" class="form-group" enctype="multipart/form-data">
-						<label><b>Title:</b></label>
+						<label><b>Title (Required):</b></label>
 						<div class="input-group mb-3">
 							<input type="text" name="title" class="form-control" placeholder="Title" aria-label="Title" value="{{eventinfo.title}}"></input>
 						</div>
 
-						<label><b>Event Decription:</b></label>
+						<label><b>Event Decription (Required):</b></label>
 						<div class="input-group mb-3">
 							<textarea name="description" class="form-control" placeholder="Event Description" aria-label="Event Description">{{eventinfo.description}}</textarea>
 						</div>
 
-						<label><b>Date:</b></label>
+						<label><b>Date (Required):</b></label>
 						<div class="input-group mb-3">
 							<input type="text" name="date" class="form-control" placeholder="Date (DD/MM/YYYY)" aria-label="Date" value="{{eventinfo.date}}"></input>
 						</div>
 
-						<label><b>Duration (hours):</b></label>
+						<label><b>Duration (Required, in hours):</b></label>
 						<div class="input-group mb-3">
 							<input type="text" name="hours" class="form-control" placeholder="Duration" aria-label="Duration" value="{{eventinfo.hours}}"></input>
 						</div>
 
-						<label><b>Number of Occurrences:</b></label>
+						<label><b>Number of Occurrences (Required):</b></label>
 						<div class="input-group mb-3">
 							<input type="text" name="num_occurrences" class="form-control" placeholder="Number of Occurrences" aria-label="Number of Occurrences" value="{{eventinfo.num_occurrences}}"></input>
 						</div>
 
-						<label for="type"><b>Type:</b></label>
+						<label for="type"><b>Type (Required):</b></label>
 						<div class="input-group mb-3">
 							<select class="form-select" id="etype" name="etype" placeholder="Type" type="select">
 								<option value="Children and Youth" {%if eventinfo['type'] == "Children and Youth"%} selected {%endif%}>Children and Youth</option>
@@ -61,7 +61,7 @@
 							</select>
 						</div>
 
-						<label for="type"><b>Location:</b></label>
+						<label for="type"><b>Location (Required):</b></label>
 						<div class="input-group mb-3">
 							<select class="form-select" id="location" name="location" placeholder="Location" type="select">
 								<option value="North" {%if eventinfo['location'] == "North" %} selected {%endif%}>North</option>

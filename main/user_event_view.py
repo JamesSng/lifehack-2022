@@ -1,5 +1,6 @@
 from flask import render_template, redirect, request, flash
 import awstools
+import ai
 from datetime import datetime, timedelta
 
 def user_event(event):
@@ -9,6 +10,13 @@ def user_event(event):
     organiserinfo = awstools.getOrganiserInfo(eventinfo['organiser'])
     participants = awstools.getVolunteersFromEvent(event)
     sort_participants = participants
+    topfiveids = ai.suggest_similar(eventinfo['eventid'])[:5]
+    topfive = []
+    for eventid in topfiveids:
+        event = awstools.getEventInfo(eventid)
+        event['organiserid'] = event['organiser']
+        event['organiser'] = awstools.getOrganiserInfo(event['organiserid'])['name']
+        topfive.append(event)
 
     if userinfo != None and userinfo['usertype'] == 0:
         for friend in userinfo['friends']:
@@ -37,7 +45,7 @@ def user_event(event):
         next_occurrence = 'Event has passed'
 
     others = awstools.getEventsFromOrganiser(eventinfo['organiser'])
-    others = [i for i in others if i != eventinfo]
+    others = [i for i in others if i['eventid'] != eventinfo['eventid']]
     for event2 in others:
         info = awstools.getOrganiserInfo(event2['organiser'])
         event2['organiser'] = info['name']
@@ -50,4 +58,4 @@ def user_event(event):
             awstools.removeEventFromVolunteer(userinfo['username'], eventinfo['eventid'])
             flash('Registration removed', 'success')
             return redirect(f'/event/{event}')
-    return render_template('user_event.html', userinfo=userinfo, eventinfo=eventinfo, organiserinfo=organiserinfo, participants=sort_participants, others=others, next_occurrence=next_occurrence)
+    return render_template('user_event.html', userinfo=userinfo, eventinfo=eventinfo, organiserinfo=organiserinfo, participants=sort_participants, others=others, similar=topfive, next_occurrence=next_occurrence)

@@ -21,10 +21,11 @@ def blog_edit(blog):
                 tags += i
         post['tags'] = tags
         post['url'] = result['url']
-        post['published'] = 'published' in result
+        if 'publish' in result:
+            post['published'] = not post['published']
 
         awstools.updateBlogInfo(blog, post)
-        return redirect(f'/edit_blog/{blog}')
+        return redirect(f'/blog/{blog}')
 
     return render_template('blog_edit.html', userinfo=userinfo, post=post)
 

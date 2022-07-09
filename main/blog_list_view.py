@@ -63,6 +63,8 @@ def blog_list():
             posts = newposts
         if friends and userinfo != None and userinfo['usertype'] == 0:
             posts = [i for i in posts if i['authortype'] == 0 and i['authorid'] in userinfo['friends']]
-
+    
+    if username == None or username == "None":
+        username = ""
     return render_template('blog_list.html', userinfo=userinfo, posts=posts, username=username, tags=tags, friends=friends)
 

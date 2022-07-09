@@ -21,62 +21,71 @@
 <div class="container-fluid p-4 col d-flex flex-column justify-content-center">
 	<div class="row">
 		<article id="post-{{post.blogid}}" class="post-{{post.blogid}} post type-post">
-			<h2>{{post.title}}</h2>
+			<h2>{{post.title}}
+			{% if userinfo != None and (userinfo.usertype == 1 and userinfo.organiserid == post.authorid) or (userinfo.usertype == 0 and userinfo.username == post.authorid) %}
+			<a href="/edit_blog/{{post.blogid}}" role="button" class="btn btn-outline-primary ms-2">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+					<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"></path>
+				</svg>
+				Edit Blog Post
+			</a>
+			{% endif %}
+			</h2>
 			{% if post.url != None %}
 			<img src="{{post.url}}">
 			{% endif %}
 			<div class="post-content">
-	    	    		<p>{% autoescape false %} {{post.content}} {% endautoescape %}</p>
+				<p>{% autoescape false %} {{post.content}} {% endautoescape %}</p>
 			</div>
 			<br>
 			<p>
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-					<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-				</svg>
-				{% if post.authortype == 0%}
-				<a href="/profile/{{post.authorid}}">{{post.authorname}}</a>
-				{% else %}
-				<a href="/org_profile/{{post.authorid}}">{{post.authorname}}</a>
-				{% endif %}
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+				<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+			</svg>
+			{% if post.authortype == 0%}
+			<a href="/profile/{{post.authorid}}">{{post.authorname}}</a>
+			{% else %}
+			<a href="/org_profile/{{post.authorid}}">{{post.authorname}}</a>
+			{% endif %}
 
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event-fill ms-3" viewBox="0 0 16 16">
-					<path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"/>
-				</svg>
-				{{post.date}}
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event-fill ms-3" viewBox="0 0 16 16">
+				<path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"/>
+			</svg>
+			{{post.date}}
 			</p>
 			{% if post.tags != None %}
 			<p>
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
-					<path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-					<path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
-				</svg>
-				{{post.tags}}
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+				<path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+				<path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
+			</svg>
+			{{post.tags}}
 			</p>
 			{% endif %}
 		</article>
 	</div>
 	<div class="row mb-3">
 		<div class="col d-flex flex-row justify-content-start">
-		{% if index != 0 %}
-		<a role="button" class="btn btn-primary" href="/blog/{{published[index - 1]}}">Previous Post</a>
-		{% else %}
-		<a role="button" class="btn btn-primary" href="/blog/{{published[-1]}}">Previous Post</a>
-		{% endif %}
+			{% if index != 0 %}
+			<a role="button" class="btn btn-primary" href="/blog/{{published[index - 1]}}">Previous Post</a>
+			{% else %}
+			<a role="button" class="btn btn-primary" href="/blog/{{published[-1]}}">Previous Post</a>
+			{% endif %}
 		</div>
 		<div class="col d-flex flex-row justify-content-end">
-		{% if index != published|length - 1 %}
-		<a role="button" class="btn btn-primary" href="/blog/{{published[index + 1]}}">Next Post</a>
-		{% else %}
-		<a role="button" class="btn btn-primary" href="/blog/{{published[0]}}">Next Post</a>
-		{% endif %}
+			{% if index != published|length - 1 %}
+			<a role="button" class="btn btn-primary" href="/blog/{{published[index + 1]}}">Next Post</a>
+			{% else %}
+			<a role="button" class="btn btn-primary" href="/blog/{{published[0]}}">Next Post</a>
+			{% endif %}
 		</div>
 	</div>
 	<div id="comment" class="container">
 		{% if userinfo != None %}
 		<h4 class="mb-3">Add a comment:</h4>
 		<form id="commentform" action="" method="post" class="form-group">
-		<textarea name="comment-text" class="form-control mb-3" placeholder="Type your comment" aria-label="Type your comment"></textarea>
-		<button type="submit" class="btn btn-primary mb-3" >Post Comment</button>
+			<textarea name="comment-text" class="form-control mb-3" placeholder="Type your comment" aria-label="Type your comment"></textarea>
+			<button type="submit" class="btn btn-primary mb-3" >Post Comment</button>
 		</form>
 		{% endif %}
 
@@ -84,12 +93,12 @@
 		<div>
 			<hr>
 			<p>
-				{% if comment['usertype'] | int == 0 %}
-				<a href="/profile/{{comment.userid}}">
+			{% if comment['usertype'] | int == 0 %}
+			<a href="/profile/{{comment.userid}}">
 				{% else %}
 				<a href="/org_profile/{{comment.userid}}">
-				{% endif %}
-				<b>{{comment.authorname}} says...</b>
+					{% endif %}
+					<b>{{comment.authorname}} says...</b>
 				</a>
 			</p>
 			<br> 

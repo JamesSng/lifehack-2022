@@ -25,12 +25,12 @@
 				<h4 class="card-header p-3"> Editing Blog Post (id: <a href="/blog/{{post.blogid}}">{{post.blogid}}</a>) </h4>
 				<div class="card-body">
 					<form id="editform" action="" method="post" class="form-group" enctype="multipart/form-data">
-						<label><b>Title:</b></label>
+						<label><b>Title (Required):</b></label>
 						<div class="input-group mb-3">
 							<input type="text" name="title" class="form-control" placeholder="Title" aria-label="Title" value="{{post.title}}">
 						</div>
 
-						<label><b>Content:</b></label>
+						<label><b>Content (Required):</b></label>
 						<div class="input-group mb-3">
 							<textarea name="description" class="form-control" placeholder="Blog Content" aria-label="Blog Content">{{post.content}}</textarea>
 						</div>
@@ -73,15 +73,9 @@
 							<input type="text" name="url" class="form-control" placeholder="Image URL" aria-label="Image URL" value="{{post.url}}">
 						</div>
 
-						<div class="container col d-flex flex-column input-group mb-3">
-							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Published" name="published" {% if post.published %} checked="" {% endif %}>
-								<b>Published</b>
-							</div>
-						</div>
-
 						<div class="input-group mb-3">
-							<button type="submit" class="btn btn-primary">Update</button>
+							<button type="submit" class="btn btn-primary me-2">Update</button>
+							<button type="submit" name="publish" class="btn btn-primary">{% if not post.published %} Publish Blog {% else %} Unpublish Blog {% endif %}</button>
 						</div>
 					</form>
 				</div>

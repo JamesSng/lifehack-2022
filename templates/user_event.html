@@ -58,6 +58,7 @@
 							<td> {{next_occurrence}} </td>
 						</tr>
 					</tbody></table>
+					{% if eventinfo['resources'] %}
 					<button class="btn btn-link" onclick="window.open('https://lifehack-materials.s3.us-west-2.amazonaws.com/{{eventinfo.eventid}}.zip')"> Download Resources </button>
 					<form id="registerform" action="" method="post" class="form-group">
 						{% if userinfo != None and userinfo.usertype == 0 %}
@@ -68,6 +69,7 @@
 						{% endif %}
 						{% endif %}
 					</form>
+					{% endif %}
 					<br>
 					<a role="button" class="btn btn-outline-secondary">
 						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-megaphone" viewBox="0 0 16 16">
@@ -154,7 +156,7 @@
 				<tbody>
 				<tr>
 					<th scope="row" class="table-width-30"> Date </th>
-					<td> {{event.date}} </tdii`
+					<td> {{event.date}} </td>
 				</tr>
 				<tr>                                    
 					<th scope="row" class="table-width-30"> Type </th>
@@ -164,12 +166,6 @@
 					<th scope="row" class="table-width-30"> Location </th>
 					<td> {{event.location}} </td>
 				</tr>
-				{% if userinfo != None and userinfo['usertype'] == 0 %}
-				<tr>
-					<th scope="row" class="table-width-30"> # of Your Friends </th>
-					<td> {{event.numfriends}} </td>
-				</tr>
-				{% endif %}
 				</tbody>
 				</table>
 				{% if userinfo != None and userinfo['usertype'] == 1 and userinfo['organiserid'] == event.organiser %}
@@ -181,6 +177,40 @@
 		</div>
 		{% endfor %}
 	</div>
+	<div class="row overflow-auto p-4 d-flex flex-row justify-content-center">
+                <hr>
+                <h2 style="text-align:center;">We recommend these similar events:</h2>
+
+                {% for event in similar %}
+                <div class="card shadow-sm p-0 m-3" style="width:25vw;">
+                        <h4 class="card-header p-2"> {{event.title}} </h4>
+                        <div class="card-body">
+                                <table class="table table-borderless table-sm">
+                                <tbody>
+                                <tr>
+                                        <th scope="row" class="table-width-30"> Date </th>
+                                        <td> {{event.date}} </td>
+                                </tr>
+                                <tr>
+                                        <th scope="row" class="table-width-30"> Type </th>
+                                        <td> {{event.type}} </td>
+                                </tr>
+                                <tr>
+                                        <th scope="row" class="table-width-30"> Location </th>
+                                        <td> {{event.location}} </td>
+                                </tr>
+                                </tbody>
+                                </table>
+                                {% if userinfo != None and userinfo['usertype'] == 1 and userinfo['organiserid'] == event.organiser %}
+                                <a href="/edit_event/{{event.eventid}}" class="stretched-link"></a>
+                                {% else %}
+                                <a href="/event/{{event.eventid}}" class="stretched-link"></a>
+                                {% endif %}
+                        </div>
+                </div>
+                {% endfor %}
+        </div>
+
 </div>
 {% endblock %}
 

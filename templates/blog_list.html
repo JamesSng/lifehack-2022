@@ -21,6 +21,7 @@
 <div class="container-fluid col p-4">
 	<div class="row">
 	<h2 class="col-8">Blog Posts</h2>
+	{% if userinfo != None %}
 	<form id="createblog" action="" method="post" class="form-group col">
 		<button type="submit" class="btn btn-primary form-control">
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -31,6 +32,7 @@
 		</button>
 		<input type="hidden" name="create">
 	</form>
+	{% endif %}
 	</div>
 
 
@@ -45,13 +47,13 @@
 				<div class="accordion-body">
 					<form id="filterform" action="" method="post" class="form-group mb-3">
 						<div class="input-group mb-3">
-							<span class="input-group-text">Filter by Author:</span>
+							<span class="input-group-text">Filter by Author (Username):</span>
 							<select name="usertype" class="form-select" placeholder="Location" aria-label="Location" style="max-width:fit-content;">
 								<option value="All">All</option>
 								<option value="Volunteer">Volunteer</option>
 								<option value="Organiser">Organiser</option>
 							</select>
-							<input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" value="{{username}}">
+							<input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" value={% if username != None %}{{username}}{% else %}""{% endif %}>
 						</div>
 						<input class="form-check-input mb-3" type="checkbox" value="" aria-label="Checkbox for friends" name="friends" {% if "friends" in request.form %} checked {% endif %}>
 						<b>Only show friends' blogs</b>
@@ -127,9 +129,9 @@
 				<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
 			</svg>
 			{% if post.authortype == 0%}
-			<a href="/profile/{{post.authorid}}">{{post.authorname}}</a>
+			<a href="/profile/{{post.authorid}}">{{post.authorname}} ({{post.authorid}})</a>
 			{% else %}
-			<a href="/org_profile/{{post.authorid}}">{{post.authorname}}</a>
+			<a href="/org_profile/{{post.authorid}}">{{post.authorname}} ({{post.authorid}})</a>
 			{% endif %}
 
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event-fill ms-3" viewBox="0 0 16 16">
