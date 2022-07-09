@@ -18,7 +18,7 @@
 	{% endwith %}
 </div>
 
-<div class="container-fluid col p-4">
+<div class="container-fluid col p-4 w-75">
 	<div class="row">
 	<h2 class="col-8">Blog Posts</h2>
 	{% if userinfo != None %}
@@ -116,7 +116,7 @@
 			</h3>	
 		</header>
 		{% if post.url != None %}
-		<img src="{{post.url}}">
+		<img src="{{post.url}}" style="max-width: 80%">
 		{% endif %}
 		<div class="post-content">
 			<p>{% autoescape false %} {{post.shortContent}} {% endautoescape %}</p>

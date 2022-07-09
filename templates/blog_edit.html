@@ -73,16 +73,16 @@
 							<input type="text" name="url" class="form-control" placeholder="Image URL" aria-label="Image URL" value="{{post.url}}">
 						</div>
 
-						<div class="input-group mb-3">
-							<button type="submit" class="btn btn-primary me-2">Update</button>
-							<button type="submit" name="publish" class="btn btn-primary">{% if not post.published %} Publish Blog {% else %} Unpublish Blog {% endif %}</button>
+						<div class="mb-3">
+							<button type="submit" class="btn btn-secondary">Update</button>
+							<button type="submit" name="publish" class="btn btn-primary">Update and {% if not post.published %}Publish Blog{% else %}Unpublish Blog{% endif %}</button>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 		<div class="col">
-			<img src="{{post.url}}">
+			<img src="{{post.url}}" style="max-width:100%">
 		</div>
 	</div>
 </div>

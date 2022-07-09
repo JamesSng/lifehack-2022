@@ -32,7 +32,7 @@
 			{% endif %}
 			</h2>
 			{% if post.url != None %}
-			<img src="{{post.url}}">
+			<img src="{{post.url}}" style="max-width:100%">
 			{% endif %}
 			<div class="post-content">
 				<p>{% autoescape false %} {{post.content}} {% endautoescape %}</p>
@@ -80,6 +80,7 @@
 			{% endif %}
 		</div>
 	</div>
+	<hr>
 	<div id="comment" class="container">
 		{% if userinfo != None %}
 		<h4 class="mb-3">Add a comment:</h4>
@@ -87,6 +88,8 @@
 			<textarea name="comment-text" class="form-control mb-3" placeholder="Type your comment" aria-label="Type your comment"></textarea>
 			<button type="submit" class="btn btn-primary mb-3" >Post Comment</button>
 		</form>
+		{% else %}
+		<h4 style="text-align:center;"> Sign in/sign up to comment. </h4>
 		{% endif %}
 
 		{% for comment in post.reversed_comments%}

@@ -160,11 +160,7 @@
 				</tr>
 				</tbody>
 				</table>
-					{% if userinfo != None and userinfo['usertype'] == 1 and userinfo['organiserid'] == profileinfo['organiserid'] %}
-					<a href="/edit_event/{{event.eventid}}" class="stretched-link"></a>
-					{% else %}
 					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
-					{% endif %}
 			</div>
 			</div>
 			{% endfor %}

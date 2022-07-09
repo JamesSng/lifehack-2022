@@ -50,6 +50,13 @@ def user_event(event):
         info = awstools.getOrganiserInfo(event2['organiser'])
         event2['organiser'] = info['name']
     if request.method == 'POST':
+        if 'create' in result:
+            blogid = awstools.getNextBlogId()
+            username = userinfo['username'] if userinfo['usertype'] == 0 else userinfo['organiserid']
+            usertype = userinfo['usertype']
+            name = userinfo['name']
+            awstools.createBlogFromId(blogid, username, usertype, name)
+            return redirect(f'/edit_blog/{blogid}')
         if userinfo['username'] not in eventinfo['participants']:
             awstools.addEventToVolunteer(userinfo['username'], eventinfo['eventid'])
             flash('Registration successful!', 'success')

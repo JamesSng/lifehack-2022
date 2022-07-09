@@ -4,6 +4,10 @@ import awstools
 def blog_edit(blog):
     userinfo = awstools.getCurrentUserInfo()
     post = awstools.getBlogInfo(blog)
+
+    if userinfo == None or (userinfo.usertype == 0 and (post.authorid == 1 or userinfo.username != post.authorid)) or (userinfo.usertype == 1 and (post.authorid == 0 or userinfo.organiserid != post.authorid)):
+        flash('You are not allowed to edit this blog!', 'danger')
+        return redirect('/blogs')
         
     if request.method == 'POST':
         result = request.form
