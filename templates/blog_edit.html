@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %} Editing Blog Post {{post.blogid}} {% endblock %} <!-- Title goes here -->
+{% block head %} {{ super() }} {% endblock %}
+
+{% block content %}
+<div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category != "compileError" %}
+        <div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
+                {{message | safe}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+</div>
+
+<div class="container-fluid p-4">
+    <div class="row p-0">
+        <div class="col-6 m-3">
+            <div class="row card shadow-sm p-0 unclickable-card mb-3">
+				<h4 class="card-header p-3"> Editing Blog Post (id: {{post.blogid}}) </h4>
+				<div class="card-body">
+					<form id="editform" action="" method="post" class="form-group" enctype="multipart/form-data">
+						<label><b>Title:</b></label>
+						<div class="input-group mb-3">
+							<input type="text" name="title" class="form-control" placeholder="Title" aria-label="Title" value="{{post.title}}">
+						</div>
+
+						<label><b>Content:</b></label>
+						<div class="input-group mb-3">
+							<textarea name="description" class="form-control" placeholder="Blog Content" aria-label="Blog Content">{{post.content}}</textarea>
+						</div>
+
+						<label for="tags"><b>Tags:</b></label>
+						<div class="container col d-flex flex-column input-group mb-3">
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 1" name="tag1" {%="" if="" 'tag1'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<b>Children and Youth</b>
+							</div>
+
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 2" name="tag2" {%="" if="" 'tag2'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<b>Seniors</b>
+							</div>
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 3" name="tag3" {%="" if="" 'tag3'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<b>Environment</b>
+							</div>
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 4" name="tag4" {%="" if="" 'tag4'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<b>Underprivileged People</b>
+							</div>
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 5" name="tag5" {%="" if="" 'tag5'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<b>Arts and Heritage</b>
+							</div>
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 6" name="tag6" {%="" if="" 'tag6'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<b>Personal</b>
+							</div>
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 7" name="tag7" {%="" if="" 'tag7'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<b>Promotional</b>
+							</div>
+						</div>
+
+						<label><b>Cover Image URL:</b></label>
+						<div class="input-group mb-3">
+							<input type="text" name="url" class="form-control" placeholder="Image URL" aria-label="Image URL" value="{{post.url}}">
+						</div>
+
+						<div class="input-group mb-3">
+							<button type="submit" class="btn btn-primary">Update</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<img src="{{post.url}}">
+		</div>
+	</div>
+</div>
+
+{% endblock %}

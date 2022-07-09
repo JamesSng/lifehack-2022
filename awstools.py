@@ -5,6 +5,7 @@ import os
 from hashlib import sha256
 from datetime import datetime, timedelta
 import csv
+import json
 
 os.environ['AWS_DEFAULT_REGION'] = 'us-west-2'
 
@@ -13,10 +14,13 @@ volunteers_table = dynamodb.Table('volunteers')
 organisers_table = dynamodb.Table('organisers')
 events_table = dynamodb.Table('events')
 blog_table = dynamodb.Table('blog')
+misc_table = dynamodb.Table('misc')
 
 s3 = boto3.client('s3', 'us-west-2')
 s3_resources = boto3.resource('s3')
 MATERIALS_BUCKET_NAME = 'lifehack-materials'
+
+lambda_client = boto3.client('lambda')
 
 def parseDate(dateString):
     return datetime.strptime(dateString, '%d/%m/%Y')
@@ -161,6 +165,15 @@ def getEventInfo(eventid):
 		return "This event doesn't exist"
 	return info[0]
 
+def getBlogInfo(blogid):
+	response = blog_table.query(
+		KeyConditionExpression = Key('blogid').eq(int(blogid))
+	)
+	info = response['Items']
+	if len(info) != 1:
+		return "This blog doesn't exist"
+	return info[0]
+
 def updateVolunteerInfo(username, info):
     volunteers_table.update_item(
         Key = {'username': username},
@@ -177,8 +190,8 @@ def createVolunteer(name, username, phone, birthdate, location, password):
     info['birthdate'] = birthdate
     info['location'] = location
     info['password'] = hashPassword(password)
-    info['friends'] = {}
-    info['events'] = {}
+    info['friends'] = []
+    info['events'] = []
     updateVolunteerInfo(username, info)
 
 def updateOrganiserInfo(organiserid, info):
@@ -195,7 +208,7 @@ def createOrganiser(name, username, bio, password):
     info['organiserid'] = username
     info['bio'] = bio
     info['password'] = hashPassword(password)
-    info['events'] = {}
+    info['events'] = []
     updateOrganiserInfo(username, info)
 
 def updateEventInfo(eventid, info):
@@ -204,6 +217,14 @@ def updateEventInfo(eventid, info):
         UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, #j=:j, #k=:k',
         ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants'], ':f':info['hours'], ':g':info['location'], ':h':info['description'], ':i':info['title'], ':j':info['type'], ':k':info['url']},
         ExpressionAttributeNames = {'#b':'date', '#g':'location', '#j':'type', '#k':'url'}
+    )
+
+def updateBlogInfo(blogid, info):
+    blog_table.update_item(
+        Key = {'blogid': int(blogid)},
+        UpdateExpression = f'set authorid=:a, authorname=:b, authortype=:c, content=:d, #e=:e, published=:f, tags=:g, title=:h, #i=:i',
+        ExpressionAttributeValues = {':a':info['authorid'], ':b':info['authorname'], ':c':info['authortype'], ':d':info['content'], ':e':info['date'], ':f':info['published'], ':g':info['tags'], ':h':info['title'], ':i':info['url']},
+        ExpressionAttributeNames = {'#e':'date', '#i':'url'}
     )
 
 def hashPassword(password):
@@ -398,8 +419,53 @@ def getEventAnalytics(eventid):
     return processAnalytics([eventid])
 
 def uploadEventResource(files, eventid):
-    s3.upload_fileobj(files, MATERIALS_BUCKET_NAME, f'{eventid}.zip')
+    s3.upload_fileobj(files, MATERIALS_BUCKET_NAME, f'{eventid}.zip', ExtraArgs={"ACL": 'public-read', "ContentType":files.content_type})
+
+def getPublishedBlogs():
+	response = misc_table.query(
+		KeyConditionExpression = Key('item').eq('publishedblogs')
+	)
+	info = response['Items']
+	if len(info) != 1:
+		return []
+	return info[0]['blogs']
+
+def updatePublishedBlogs(blogs):
+    misc_table.update_item(
+        Key = {'item': 'publishedblogs'},
+        UpdateExpression = f'set blogs=:a',
+        ExpressionAttributeValues = {':a':blogs}
+    )
+
+def publishBlog(blogid):
+    info = getBlogInfo(blogid)
+    info['published'] = True
+    updateBlogInfo(blogid, info)
+
+    blogs = getPublishedBlogs()
+    if blogid not in blogs:
+        blogs.append(blogid)
+    updatePublishedBlogs(blogs)
+
+def unpublishBlog(blogid):
+    info = getBlogInfo(blogid)
+    info['published'] = False
+    updateBlogInfo(blogid, info)
+
+    blogs = getPublishedBlogs()
+    if blogid in blogs:
+        blogs.remove(blogid)
+    updatePublishedBlogs(blogs)
+
+def getNextBlogId():
+    res = lambda_client.invoke(
+        FunctionName = 'arn:aws:lambda:us-west-2:669016928924:function:next-blog-id',
+        InvocationType = 'RequestResponse'
+    )
+    blog_index = json.load(res["Payload"])
+    return blog_index['blogId']
 
 if __name__ == '__main__':
-    print(getEventsFromOrganiser('singaporezoo'))
-
+    print(getNextBlogId())
+    print(getNextBlogId())
+    print(getNextBlogId())

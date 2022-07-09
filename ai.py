@@ -9,7 +9,7 @@ from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
 import enchant
 import math
-
+import random
 def pos_tagger(nltk_tag):
     if nltk_tag.startswith('J'):
         return wordnet.ADJ
@@ -95,8 +95,34 @@ def suggest_similar(eventid):
         names.append(x[1])
     return names
 
-
+def suggest_user(userid):
+    arr=[x['eventid'] for x in awstools.getEventsFromVolunteer(userid)]
+    df=get_events()
+    
+    vector = [0]*300
+    names=[]
+    for index,row in df.iterrows():
+        if index in arr:
+            print(index)
+            for i in range(300):
+                vector[i]+=row['vector'][i]
+        else:
+            names.append(index)
+    if len(arr)==0:
+        random.shuffle(names)
+        return names
+    for i in range(300):
+        vector[i]/=len(arr)
+    lst=[]
+    for i in names:
+        dist=math.dist(df.loc[i,'vector'],vector)
+        lst.append((dist,i))
+    lst.sort()
+    names=[]
+    for x in lst:
+        names.append(x[1])
+    return names
 
 if __name__ == '__main__':
-    print(suggest_similar('beach_cleaning_1'))
+    print(suggest_user('tiashiting'))
 

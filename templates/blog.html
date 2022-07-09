@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %} Blog Post - {{post.title}} {% endblock %} <!-- Title goes here -->
+{% block head %} {{ super() }} {% endblock %}
+
+{% block content %}
+<div class="container">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	{% for category, message in messages %}
+	{% if category != "compileError" %}
+	<div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
+		{{message | safe}}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	{% endif %}
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
+</div>
+
+<div class="container-fluid p-4 col d-flex flex-column justify-content-center">
+	<div class="row">
+		<article id="post-{{post.blogid}}" class="post-{{post.blogid}} post type-post">
+			<h2>{{post.title}}</h2>
+			{% if post.url != None %}
+			<img src="{{post.url}}">
+			{% endif %}
+			<div class="post-content">
+				<p>{{post.content}}</p>
+				<a href="/blog/{{post.blogid}}" class="more-link">Read More</a>
+			</div>
+			<br>
+			<p>
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+					<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+				</svg>
+				{% if post.authortype == 0%}
+				<a href="/profile/{{post.authorid}}">{{post.authorname}}</a>
+				{% else %}
+				<a href="/org_profile/{{post.authorid}}">{{post.authorname}}</a>
+				{% endif %}
+
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-event-fill ms-3" viewBox="0 0 16 16">
+					<path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4V.5zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zm-3.5-7h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5z"/>
+				</svg>
+				{{post.date}}
+			</p>
+			{% if post.tags != None %}
+			<p>
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+					<path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+					<path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
+				</svg>
+				{{post.tags}}
+			</p>
+			{% endif %}
+		</article>
+	</div>
+	<div class="row d-flex flex-row justify-content-between">
+		{% if post.blogid != 1 %}
+		<a role="button" type="btn btn-outline-primary" href="/blog/{{post.blogid - 1}}">Previous Post</a>
+		{% else %}
+		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="#">Previous Post</a>
+		{% endif %}
+		{% if post.blogid != total_num_posts %}
+		<a role="button" type="btn btn-outline-primary" href="/blog/{{post.blogid + 1}}">Next Post</a>
+		{% else %}
+		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="#">Next Post</a>
+		{% endif %}
+	</div>
+	<div id="comment">
+		<h4>Add a comment:</h4>
+		<textarea name="comment-text" class="form-control" placeholder="Type your comment" aria-label="Type your comment"></textarea>
+		<button type="submit">Post Comment</button>
+
+		{% for comment in comments%}
+		<div>
+			<hr>
+			<p><b>{{comment.authorname}} says...</b></p>
+			<br> 
+			<p>{{comment.text}}</p>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+{% endblock %}
