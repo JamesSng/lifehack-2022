@@ -30,7 +30,7 @@ app.add_url_rule('/event/<event>', view_func = user_event_view.user_event, metho
 app.add_url_rule('/blogs', view_func = blog_list_view.blog_list)
 app.add_url_rule('/events', view_func = event_list_view.event_list, methods = ['GET', 'POST'])
 app.add_url_rule('/edit_event/<event>', view_func = organiser_event_view.organiser_event, methods = ['GET', 'POST'])
-app.add_url_rule('/blog/<blog>', view_func = blog_view.blog)
+app.add_url_rule('/blog/<blog>', view_func = blog_view.blog, methods = ['GET', 'POST'])
 app.add_url_rule('/edit_blog/<blog>', view_func = blog_edit_view.blog_edit, methods = ['GET', 'POST'])
 
 @app.route('/resources/<path:path>')

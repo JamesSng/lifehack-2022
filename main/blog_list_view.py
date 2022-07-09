@@ -5,14 +5,6 @@ def blog_list():
     userinfo = awstools.getCurrentUserInfo()
     posts = awstools.getAllBlogPosts()
     for post in posts:
-        #tokens = post['content'].split(' ')
-        #arr = tokens[:min(100,len(tokens))]
-        #newString = ""
-        #for word in arr:
-        #    newString = newString + word + " "
-        #if 100 < len(tokens):
-        #    newString = newString + "[...]"
-        #post['shortContent'] = newString
         newString = post['content'][:min(500, len(post['content']))]
         while not newString[-1].isspace():
             newString = newString[:-1]

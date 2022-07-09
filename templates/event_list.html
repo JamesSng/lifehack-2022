@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Home {% endblock %} <!-- Title goes here -->
+{% block title %} View Events {% endblock %} <!-- Title goes here -->
 {% block head %} {{ super() }} {% endblock %}
 
 {% block content %}
@@ -36,7 +36,7 @@
 				<option value="Children and Youth" {%if request.form['etype'] == "Children and Youth"%} selected {%endif%}>Children and Youth</option>
 				<option value="Seniors" {%if request.form['etype'] == "Seniors"%} selected {%endif%}>Seniors</option>
 				<option value="Environment" {%if request.form['etype'] == "Environment"%} selected {%endif%}>Environment</option>
-				<option value="Underprivileged People" {%if request.form['etype'] == "Underprivileged People"%} selected {%endif%}>Underprivileged People</option>
+				<option value="Underprivileged" {%if request.form['etype'] == "Underprivileged"%} selected {%endif%}>Underprivileged</option>
 				<option value="Arts and Heritage" {%if request.form['etype'] == "Arts and Heritage"%} selected {%endif%}>Arts and Heritage</option>
 			</select>
 			</div>

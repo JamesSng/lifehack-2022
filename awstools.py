@@ -214,8 +214,8 @@ def createOrganiser(name, username, bio, password):
 def updateEventInfo(eventid, info):
 	events_table.update_item(
         Key = {'eventid': eventid},
-        UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, #j=:j, #k=:k',
-        ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants'], ':f':info['hours'], ':g':info['location'], ':h':info['description'], ':i':info['title'], ':j':info['type'], ':k':info['url']},
+        UpdateExpression = f'set #b=:b, num_occurrences=:c, organiser=:d, participants=:e, hours=:f, #g=:g, description=:h, title=:i, #j=:j, #k=:k, resources=:l',
+        ExpressionAttributeValues = {':b':info['date'], ':c':info['num_occurrences'], ':d':info['organiser'], ':e':info['participants'], ':f':info['hours'], ':g':info['location'], ':h':info['description'], ':i':info['title'], ':j':info['type'], ':k':info['url'], ':l':info['resources']},
         ExpressionAttributeNames = {'#b':'date', '#g':'location', '#j':'type', '#k':'url'}
     )
 
@@ -238,8 +238,8 @@ def updateBlogInfo(blogid, info):
         unpublishBlog(int(blogid))
     blog_table.update_item(
         Key = {'blogid': int(blogid)},
-        UpdateExpression = f'set authorid=:a, authorname=:b, authortype=:c, content=:d, #e=:e, published=:f, tags=:g, title=:h, #i=:i',
-        ExpressionAttributeValues = {':a':info['authorid'], ':b':info['authorname'], ':c':info['authortype'], ':d':info['content'], ':e':info['date'], ':f':info['published'], ':g':info['tags'], ':h':info['title'], ':i':info['url']},
+        UpdateExpression = f'set authorid=:a, authorname=:b, authortype=:c, content=:d, #e=:e, published=:f, tags=:g, title=:h, #i=:i, comments=:j',
+        ExpressionAttributeValues = {':a':info['authorid'], ':b':info['authorname'], ':c':info['authortype'], ':d':info['content'], ':e':info['date'], ':f':info['published'], ':g':info['tags'], ':h':info['title'], ':i':info['url'], ':j':info['comments']},
         ExpressionAttributeNames = {'#e':'date', '#i':'url'}
     )
 
@@ -438,6 +438,9 @@ def getEventAnalytics(eventid):
     return processAnalytics([eventid])
 
 def uploadEventResource(files, eventid):
+    info = getEventInfo(eventid)
+    info['resources'] = True
+    updateEventInfo(eventid, info)
     s3.upload_fileobj(files, MATERIALS_BUCKET_NAME, f'{eventid}.zip', ExtraArgs={"ACL": 'public-read', "ContentType":files.content_type})
 
 def getPublishedBlogs():

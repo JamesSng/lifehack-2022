@@ -56,9 +56,13 @@
 
 /* Modal Content/Box */
 .modal-content {
-  position: relative;
+  position: absolute;
+  top: 100px;
   background-color: #fefefe;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
   padding: 0;
   border: 1px solid #888;
   width: 70%;
@@ -95,5 +99,25 @@
 /* Add Animation */
 @keyframes animatetop {
   from {top: -300px; opacity: 0}
-  to {top: 0; opacity: 1}
-} 
+  to {top: 100px; opacity: 1}
+}
+
+.whatsapp-btn {
+  color: #25d366;
+  border-color: #25d366;
+}
+.whatsapp-btn:hover {
+  color: white;
+  background-color: #25d366;
+  border-color: #25d366;
+}
+
+.telegram-btn {
+  color: #0088cc;
+  border-color: #0088cc;
+}
+.telegram-btn:hover {
+  color: white;
+  background-color: #0088cc;
+  border-color: #0088cc;
+}

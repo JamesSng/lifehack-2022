@@ -26,8 +26,7 @@
 			<img src="{{post.url}}">
 			{% endif %}
 			<div class="post-content">
-				<p>{{post.content}}</p>
-				<a href="/blog/{{post.blogid}}" class="more-link">Read More</a>
+	    	    		<p>{% autoescape false %} {{post.content}} {% endautoescape %}</p>
 			</div>
 			<br>
 			<p>
@@ -56,27 +55,43 @@
 			{% endif %}
 		</article>
 	</div>
-	<div class="row d-flex flex-row justify-content-between">
+	<div class="row mb-3">
+		<div class="col d-flex flex-row justify-content-start">
 		{% if index != 0 %}
-		<a role="button" type="btn btn-outline-primary" href="/blog/{{published[index - 1]}}">Previous Post</a>
+		<a role="button" class="btn btn-primary" href="/blog/{{published[index - 1]}}">Previous Post</a>
 		{% else %}
-		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="/blog/{{published[-1]}}">Previous Post</a>
+		<a role="button" class="btn btn-primary" href="/blog/{{published[-1]}}">Previous Post</a>
 		{% endif %}
+		</div>
+		<div class="col d-flex flex-row justify-content-end">
 		{% if index != published|length - 1 %}
-		<a role="button" type="btn btn-outline-primary" href="/blog/{{published[index + 1]}}">Next Post</a>
+		<a role="button" class="btn btn-primary" href="/blog/{{published[index + 1]}}">Next Post</a>
 		{% else %}
-		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="/blog/{{published[0]}}">Next Post</a>
+		<a role="button" class="btn btn-primary" href="/blog/{{published[0]}}">Next Post</a>
 		{% endif %}
+		</div>
 	</div>
-	<div id="comment">
-		<h4>Add a comment:</h4>
-		<textarea name="comment-text" class="form-control" placeholder="Type your comment" aria-label="Type your comment"></textarea>
-		<button type="submit">Post Comment</button>
+	<div id="comment" class="container">
+		{% if userinfo != None %}
+		<h4 class="mb-3">Add a comment:</h4>
+		<form id="commentform" action="" method="post" class="form-group">
+		<textarea name="comment-text" class="form-control mb-3" placeholder="Type your comment" aria-label="Type your comment"></textarea>
+		<button type="submit" class="btn btn-primary mb-3" >Post Comment</button>
+		</form>
+		{% endif %}
 
-		{% for comment in comments%}
+		{% for comment in post.reversed_comments%}
 		<div>
 			<hr>
-			<p><b>{{comment.authorname}} says...</b></p>
+			<p>
+				{% if comment['usertype'] | int == 0 %}
+				<a href="/profile/{{comment.userid}}">
+				{% else %}
+				<a href="/org_profile/{{comment.userid}}">
+				{% endif %}
+				<b>{{comment.authorname}} says...</b>
+				</a>
+			</p>
 			<br> 
 			<p>{{comment.text}}</p>
 		</div>

@@ -49,16 +49,15 @@ def organiser_event(event):
         info['url'] = url
         info['organiser'] = userinfo['organiserid']
         info['participants'] = eventinfo['participants']
+        info['resources'] = eventinfo['resources']
         awstools.updateEventInfo(event, info)
 
-        print(files)
-        if 'resources' not in files or files['resources'].filename == '':
-            flash('Resources not found', 'warning')
-        elif '.' not in files['resources'].filename or files['resources'].filename.rsplit('.', 1)[1].lower() != 'zip':
-            flash('Invalid file format', 'warning')
-        else:
-            awstools.uploadEventResource(files['resources'], event)
-            flash('Resources uploaded!', 'success')
+        if 'resources' in files and files['resources'].filename != '':
+            if '.' not in files['resources'].filename or files['resources'].filename.rsplit('.', 1)[1].lower() != 'zip':
+                flash('Invalid file format', 'warning')
+            else:
+                awstools.uploadEventResource(files['resources'], event)
+                flash('Resources uploaded!', 'success')
 
         return redirect(f'/edit_event/{event}')
 
