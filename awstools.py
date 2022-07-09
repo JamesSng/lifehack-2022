@@ -219,7 +219,23 @@ def updateEventInfo(eventid, info):
         ExpressionAttributeNames = {'#b':'date', '#g':'location', '#j':'type', '#k':'url'}
     )
 
+def publishBlog(blogid):
+    blogs = getPublishedBlogs()
+    if blogid not in blogs:
+        blogs.append(blogid)
+    updatePublishedBlogs(blogs)
+
+def unpublishBlog(blogid):
+    blogs = getPublishedBlogs()
+    if blogid in blogs:
+        blogs.remove(blogid)
+    updatePublishedBlogs(blogs)
+
 def updateBlogInfo(blogid, info):
+    if info['published']:
+        publishBlog(int(blogid))
+    else:
+        unpublishBlog(int(blogid))
     blog_table.update_item(
         Key = {'blogid': int(blogid)},
         UpdateExpression = f'set authorid=:a, authorname=:b, authortype=:c, content=:d, #e=:e, published=:f, tags=:g, title=:h, #i=:i',
@@ -345,7 +361,10 @@ def getFriendsFromVolunteer(username):
     return friends
 
 def getEventTypes():
-    return ['Children and Youth', 'Seniors', 'Environment', 'Underprivileged People', 'Arts and Heritage']
+    return ['Children and Youth', 'Seniors', 'Environment', 'Underprivileged', 'Arts and Heritage']
+
+def getBlogTags():
+    return getEventTypes() + ['Personal', 'Promotional']
 
 def getVolunteeringInterests(username):
     events = getEventsFromVolunteer(username)
@@ -437,26 +456,6 @@ def updatePublishedBlogs(blogs):
         ExpressionAttributeValues = {':a':blogs}
     )
 
-def publishBlog(blogid):
-    info = getBlogInfo(blogid)
-    info['published'] = True
-    updateBlogInfo(blogid, info)
-
-    blogs = getPublishedBlogs()
-    if blogid not in blogs:
-        blogs.append(blogid)
-    updatePublishedBlogs(blogs)
-
-def unpublishBlog(blogid):
-    info = getBlogInfo(blogid)
-    info['published'] = False
-    updateBlogInfo(blogid, info)
-
-    blogs = getPublishedBlogs()
-    if blogid in blogs:
-        blogs.remove(blogid)
-    updatePublishedBlogs(blogs)
-
 def getNextBlogId():
     res = lambda_client.invoke(
         FunctionName = 'arn:aws:lambda:us-west-2:669016928924:function:next-blog-id',
@@ -466,6 +465,4 @@ def getNextBlogId():
     return blog_index['blogId']
 
 if __name__ == '__main__':
-    print(getNextBlogId())
-    print(getNextBlogId())
-    print(getNextBlogId())
+    pass

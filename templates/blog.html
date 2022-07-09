@@ -57,15 +57,15 @@
 		</article>
 	</div>
 	<div class="row d-flex flex-row justify-content-between">
-		{% if post.blogid != 1 %}
-		<a role="button" type="btn btn-outline-primary" href="/blog/{{post.blogid - 1}}">Previous Post</a>
+		{% if index != 0 %}
+		<a role="button" type="btn btn-outline-primary" href="/blog/{{published[index - 1]}}">Previous Post</a>
 		{% else %}
-		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="#">Previous Post</a>
+		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="/blog/{{published[-1]}}">Previous Post</a>
 		{% endif %}
-		{% if post.blogid != total_num_posts %}
-		<a role="button" type="btn btn-outline-primary" href="/blog/{{post.blogid + 1}}">Next Post</a>
+		{% if index != published|length - 1 %}
+		<a role="button" type="btn btn-outline-primary" href="/blog/{{published[index + 1]}}">Next Post</a>
 		{% else %}
-		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="#">Next Post</a>
+		<a role="button" type="btn btn-outline-primary disabled" aria-disabled="true" href="/blog/{{published[0]}}">Next Post</a>
 		{% endif %}
 	</div>
 	<div id="comment">

@@ -38,32 +38,32 @@
 						<label for="tags"><b>Tags:</b></label>
 						<div class="container col d-flex flex-column input-group mb-3">
 							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 1" name="tag1" {%="" if="" 'tag1'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 1" name="Children and Youth" {% if "Children and Youth" in post.tags %} checked="" {% endif %}>
 								<b>Children and Youth</b>
 							</div>
 
 							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 2" name="tag2" {%="" if="" 'tag2'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 2" name="Seniors" {% if "Seniors" in post.tags %} checked="" {% endif %}>
 								<b>Seniors</b>
 							</div>
 							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 3" name="tag3" {%="" if="" 'tag3'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 3" name="Environment" {% if "Environment" in post.tags %} checked {% endif %} >
 								<b>Environment</b>
 							</div>
 							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 4" name="tag4" {%="" if="" 'tag4'="" in="" request.form="" %}="" checked="" {%endif%}="">
-								<b>Underprivileged People</b>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 4" name="Underprivileged" {% if "Underprivileged" in post.tags %} checked {% endif %}>								
+								<b>Underprivileged</b>
 							</div>
 							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 5" name="tag5" {%="" if="" 'tag5'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 5" name="Arts and Heritage" {% if "Arts and Heritage" in post.tags %} checked {% endif %}>
 								<b>Arts and Heritage</b>
 							</div>
 							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 6" name="tag6" {%="" if="" 'tag6'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 6" name="Personal" {% if "Personal" in post.tags %} checked {% endif %}>
 								<b>Personal</b>
 							</div>
 							<div>
-								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 7" name="tag7" {%="" if="" 'tag7'="" in="" request.form="" %}="" checked="" {%endif%}="">
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Tag 7" name="Promotional" {%if "Promotional" in post.tags %} checked {% endif %}>
 								<b>Promotional</b>
 							</div>
 						</div>
@@ -72,7 +72,14 @@
 						<div class="input-group mb-3">
 							<input type="text" name="url" class="form-control" placeholder="Image URL" aria-label="Image URL" value="{{post.url}}">
 						</div>
-
+						
+						<div class="container col d-flex flex-column input-group mb-3">
+							<div>
+								<input class="form-check-input" type="checkbox" value="" aria-label="Checkbox for Published" name="published" {% if post.published %} checked="" {% endif %}>
+								<b>Published</b>
+							</div>
+						</div>
+						
 						<div class="input-group mb-3">
 							<button type="submit" class="btn btn-primary">Update</button>
 						</div>

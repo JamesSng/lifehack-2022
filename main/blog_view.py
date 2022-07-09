@@ -4,15 +4,13 @@ import awstools
 def blog(blog):
     userinfo = awstools.getCurrentUserInfo()
     post = awstools.getBlogInfo(blog)
-        
-    tokens = post['content'].split(' ')
-    arr = tokens[:min(100,len(tokens))]
-    newString = ""
-    for word in arr:
-        newString = newString + word + " "
-    if 100 < len(tokens):
-        newString = newString + "[...]"
-    post['shortContent'] = newString
 
-    return render_template('blog.html', userinfo=userinfo, post=post)
+    blog = int(blog)
+    published = awstools.getPublishedBlogs()
+    if blog not in published:
+        flash('This blog does not exist!', 'warning')
+        return redirect('/blogs')
+    index = published.index(blog)
+        
+    return render_template('blog.html', userinfo=userinfo, post=post, index=index, published=published)
 
