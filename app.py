@@ -1,5 +1,5 @@
 from flask import Flask, render_template, url_for, redirect, send_from_directory
-from main import user_login_view, organiser_login_view, user_register_view, organiser_register_view, user_profile_view, user_home_view, organiser_profile_view, user_event_view
+from main import user_login_view, organiser_login_view, user_register_view, organiser_register_view, user_profile_view, user_home_view, organiser_profile_view, user_event_view, organiser_event_view
 import awstools
 
 app = Flask(__name__)
@@ -27,6 +27,7 @@ app.add_url_rule('/profile/<user>', view_func = user_profile_view.user_profile, 
 app.add_url_rule('/user_home', view_func = user_home_view.user_home, methods = ['GET', 'POST'])
 app.add_url_rule('/org_profile/<user>', view_func = organiser_profile_view.organiser_profile)
 app.add_url_rule('/event/<event>', view_func = user_event_view.user_event, methods = ['GET', 'POST'])
+app.add_url_rule('/edit_event/<event>', view_func = organiser_event_view.organiser_event, methods = ['GET', 'POST'])
 
 @app.route('/resources/<path:path>')
 def get_route(path):

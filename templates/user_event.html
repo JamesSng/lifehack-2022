@@ -53,6 +53,12 @@
 							<th scope="row"> Number of Occurrences </th>
 							<td> {{eventinfo.num_occurrences}} </td>
 						</tr>
+						{% if userinfo != None and userinfo['usertype'] == 0 %}
+						<tr>
+						<th scope="row" class="table-width-30"> # of Your Friends </th>
+						<td> {{eventinfo.numfriends}} </td>
+						</tr>
+						{% endif %}
 					</tbody></table>
 					<form id="registerform" action="" method="post" class="form-group">
 						{% if userinfo != None and userinfo.usertype == 0 %}
@@ -107,7 +113,7 @@
 					<th scope="row" class="table-width-30"> Location </th>
 					<td> {{event.location}} </td>
 				</tr>
-				{% if userinfo != None %}
+				{% if userinfo != None and userinfo['usertype'] == 0 %}
 				<tr>
 					<th scope="row" class="table-width-30"> # of Your Friends </th>
 					<td> {{event.numfriends}} </td>

@@ -345,7 +345,7 @@ def getVolunteeringHours(username):
             datestr = date.strftime('%Y-%m-%d')
             if datestr not in dates:
                 dates[datestr] = 0
-            dates[datestr] += eventinfo['hours']
+            dates[datestr] += float(eventinfo['hours'])
             date += timedelta(days = 7)
             if date > now:
                 break

@@ -1,24 +1,107 @@
 {% extends "base.html" %}
-{% block title %} Event {% endblock %} <!-- Title goes here -->
+{% block title %} Editing Event - {{eventinfo.eventid}} {% endblock %} <!-- Title goes here -->
 {% block head %} {{ super() }} {% endblock %}
 
 {% block content %}
 <div class="container">
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	{% for category, message in messages %}
 	{% if category != "compileError" %}
 	<div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
 		{{message | safe}}
 		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
 	{% endif %}
-{% endfor %}
-{% endif %}
-{% endwith %}
+	{% endfor %}
+	{% endif %}
+	{% endwith %}
 </div>
-<div class="container-fluid row p-4">
-	
+
+<div class="container-fluid p-4">
+	<div class="row p-0">
+		<div class="col-6 m-3">
+			<div class="row card shadow-sm p-0 unclickable-card mb-3">
+				<h4 class="card-header p-3"> Editing {{eventinfo.eventid}} </h4>
+				<div class="card-body">
+					<form id="editform" action="" method="post" class="form-group">
+						<label><b>Title:</b></label>
+						<div class="input-group mb-3">
+							<input type="text" name="title" class="form-control" placeholder="Title" aria-label="Title" value="{{eventinfo.title}}"></input>
+						</div>
+
+						<label><b>Event Decription:</b></label>
+						<div class="input-group mb-3">
+							<textarea name="description" class="form-control" placeholder="Event Description" aria-label="Event Description">{{eventinfo.description}}</textarea>
+						</div>
+
+						<label><b>Date:</b></label>
+						<div class="input-group mb-3">
+							<input type="text" name="date" class="form-control" placeholder="Date (DD/MM/YYYY)" aria-label="Date" value="{{eventinfo.date}}"></input>
+						</div>
+
+						<label><b>Duration (hours):</b></label>
+						<div class="input-group mb-3">
+							<input type="text" name="hours" class="form-control" placeholder="Duration" aria-label="Duration" value="{{eventinfo.hours}}"></input>
+						</div>
+
+						<label><b>Number of Occurrences:</b></label>
+						<div class="input-group mb-3">
+							<input type="text" name="num_occurrences" class="form-control" placeholder="Number of Occurrences" aria-label="Number of Occurrences" value="{{eventinfo.num_occurrences}}"></input>
+						</div>
+
+						<label for="type"><b>Type:</b></label>
+						<div class="input-group mb-3">
+							<select class="form-select" id="etype" name="etype" placeholder="Type" type="select">
+								<option value="Children and Youth" {%if eventinfo['type'] == "Children and Youth"%} selected {%endif%}>Children and Youth</option>
+								<option value="Seniors" {%if eventinfo['type'] == "Seniors"%} selected {%endif%}>Seniors</option>
+								<option value="Environment" {%if eventinfo['type'] == "Environment"%} selected {%endif%}>Environment</option>
+								<option value="Underprivileged People" {%if eventinfo['type'] == "Underprivileged People"%} selected {%endif%}>Underprivileged People</option>
+								<option value="Arts and Heritage" {%if eventinfo['type'] == "Arts and Heritage"%} selected {%endif%}>Arts and Heritage</option>
+							</select>
+						</div>
+
+						<label for="type"><b>Location:</b></label>
+						<div class="input-group mb-3">
+							<select class="form-select" id="location" name="location" placeholder="Location" type="select">
+								<option value="North" {%if eventinfo['location'] == "North" %} selected {%endif%}>North</option>
+								<option value="South" {%if eventinfo['location'] == "South" %} selected {%endif%}>South</option>
+								<option value="East" {%if eventinfo['location'] == "East" %} selected {%endif%}>East</option>
+								<option value="West" {%if eventinfo['location'] == "West" %} selected {%endif%}>West</option>
+								<option value="Central" {%if eventinfo['location'] == "Central" %} selected {%endif%}>Central</option>
+							</select>
+						</div>
+
+						<label><b>Image URL:</b></label>
+						<div class="input-group mb-3">
+							<input type="text" name="url" class="form-control" placeholder="Image URL" aria-label="Image URL" value="{{eventinfo.url}}"></input>
+						</div>
+
+						<div class="input-group mb-3">
+							<button type="submit" class="btn btn-primary">Update</button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row card shadow-sm p-0 unclickable-card">
+				<h4 class="card-header p-3"> Participants </h4>
+
+				<div class="card-body">
+					<ul>
+						{% for user in participants %}
+						<li>
+							{{user.name}} (<a href="/profile/{{user.username}}">{{user.username}}</a>) - {{user.phone}}
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<div class="col">
+			<img src="{{eventinfo.url}}">
+		</div>
+	</div>
 </div>
 {% endblock %}
 

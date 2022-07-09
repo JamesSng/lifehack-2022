@@ -111,7 +111,9 @@
 		</div>
 		<div class="row">
 			<h4>Events Organised</h4>
+			{% if userinfo != None and userinfo['usertype'] == 1 and userinfo['organiserid'] == profileinfo['organiserid'] %}
 			<p>Click on an event to edit it.</p>
+			{% endif %}
 			{% for event in eventlist %}
 			<div class="card shadow-sm p-0 m-2" style="width:15vw;">
 				<h4 class="card-header p-2"> {{event.title}} </h4>
@@ -130,7 +132,7 @@
 						<th scope="row" class="table-width-30"> Location </th>
 						<td> {{event.location}} </td>
 					</tr>
-					{% if userinfo != None %}
+					{% if userinfo != None and userinfo['usertype'] == 0 %}
 					<tr>
 						<th scope="row" class="table-width-30"> # of Your Friends </th>
 						<td> {{event.numfriends}} </td>
@@ -138,7 +140,11 @@
 					{% endif %}
 					</tbody>
 					</table>
+					{% if userinfo != None and userinfo['usertype'] == 1 and userinfo['organiserid'] == profileinfo['organiserid'] %}
 					<a href="/edit_event/{{event.eventid}}" class="stretched-link"></a>
+					{% else %}
+					<a href="/event/{{event.eventid}}" class="stretched-link"></a>
+					{% endif %}
 				</div>
 			</div>
 			{% endfor %}

@@ -1,5 +1,6 @@
 import awstools
 
+import gensim
 import pandas as pd
 import string
 import nltk
@@ -46,12 +47,27 @@ def clean_text(text):
     return ''.join([c for c in text if ord(c)<128])
 
 
+def tokenize_text(text):
+    tokens = []
+    for sent in nltk.sent_tokenize(text):
+        for word in nltk.word_tokenize(sent):
+            if len(word) < 2:
+                continue
+            tokens.append(word.lower())
+    return tokens
+
+
 def get_events():
     events = awstools.getAllEvents() 
-    df = pd.DataFrame(['a', 'b'], columns=['id', 'description'])
-    for event in events:
-        df = df.append(pd.DataFrame([event['eventid'], event['description']], columns=['id', 'description']))
-    print(df)
+    arr = []
+    model = gensim.models.KeyedVectors.load_word2vec_format('model/GoogleNews-vectors-negative300.bin', binary=True)
+    #for event in events:
+        #words = tokenize_text(event['description'])
+        #for word in words:
+            #print(model[word])
+        #arr.append([event['eventid'], event['description'], )
+    #df = pd.DataFrame(arr, columns=['id', 'description', 'vector'])
+    #print(df)
 
 
 if __name__ == '__main__':

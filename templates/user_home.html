@@ -203,7 +203,7 @@
 					<th scope="row" class="table-width-30"> Recurring? </th>
 					<td> {% if event.num_occurrences > 1 %} Yes {% else %} No {% endif %} </td>
 				</tr>
-				{% if userinfo != None %}
+				{% if userinfo != None and userinfo['usertype'] == 0 %}
 				<tr>
 					<th scope="row" class="table-width-30"> # of Your Friends </th>
 					<td> {{event.numfriends}} </td>
