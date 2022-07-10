@@ -50,7 +50,9 @@ def blog_list():
         friends = 'friends' in result
         
         if username:
-            posts = [i for i in posts if username == i['authorid'] and int(i['authortype']) in usertype]
+            posts = [i for i in posts if username == i['authorid']]
+        if usertype:
+            posts = [i for i in posts if int(i['authortype']) in usertype]
         if tags:
             newposts = []
             for i in posts:
