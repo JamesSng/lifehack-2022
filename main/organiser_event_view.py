@@ -12,6 +12,7 @@ def organiser_event(event):
     organiserinfo = awstools.getOrganiserInfo(eventinfo['organiser'])
     participants = awstools.getVolunteersFromEvent(event)
 
+    success = True
     if request.method == 'POST':
         result = request.form
         files = request.files
@@ -28,6 +29,7 @@ def organiser_event(event):
         if not awstools.check_date(date):
             flash('Invalid date format!', 'warning')
             date = eventinfo['date']
+            success = False
 
         info = {}
         info['eventid'] = event
@@ -39,15 +41,18 @@ def organiser_event(event):
         except:
             info['hours'] = Decimal(eventinfo['hours'])
             flash('Invalid duration format', 'warning')
+            success = False
         try:
             if int(num_occurrences) < 1:
                 info['num_occurrences'] = int(eventinfo['num_occurrences'])
                 flash('Invalid value of number of occurrences', 'warning')
+                success = False
             else:
                 info['num_occurrences'] = int(num_occurrences)
         except:
             info['num_occurrences'] = int(eventinfo['num_occurrences'])
             flash('Invalid number of occurrences format', 'warning')
+            success = False
         info['type'] = etype
         info['location'] = location
         info['url'] = url
@@ -59,11 +64,13 @@ def organiser_event(event):
         if 'resources' in files and files['resources'].filename != '':
             if '.' not in files['resources'].filename or files['resources'].filename.rsplit('.', 1)[1].lower() != 'zip':
                 flash('Invalid file format', 'warning')
+                success = False
             else:
                 awstools.uploadEventResource(files['resources'], event)
                 flash('Resources uploaded!', 'success')
 
-        return redirect(f'/edit_event/{event}')
+        if success:
+            return redirect(f'/event/{event}')
 
     return render_template('organiser_event.html', userinfo=userinfo, eventinfo=eventinfo, participants=participants)
 

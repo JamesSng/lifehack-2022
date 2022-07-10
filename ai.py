@@ -94,7 +94,7 @@ def suggest_similar(eventid):
     for x in lst:
         names.append(x[1])
     return names
-
+"""
 def suggest_user(userid):
     arr = [x['eventid'] for x in awstools.getEventsFromVolunteer(userid)]
     df = get_events()
@@ -115,8 +115,8 @@ def suggest_user(userid):
         names.append(x[1])
     return names
         
-
 """
+
 def suggest_user(userid):
     arr=[x['eventid'] for x in awstools.getEventsFromVolunteer(userid)]
     df=get_events()
@@ -143,7 +143,7 @@ def suggest_user(userid):
     for x in lst:
         names.append(x[1])
     return names
-"""
+
 
 if __name__ == '__main__':
     username = input('Username: ')

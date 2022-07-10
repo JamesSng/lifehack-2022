@@ -50,6 +50,9 @@ def user_event(event):
     for event2 in others:
         info = awstools.getOrganiserInfo(event2['organiser'])
         event2['organiser'] = info['name']
+
+    eventinfo['description'] = eventinfo['description'].replace('\n', '<br>')
+
     if request.method == 'POST':
         result = request.form
         if 'create' in result:

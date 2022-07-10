@@ -3,6 +3,20 @@
 {% block head %} {{ super() }} {% endblock %}
 
 {% block content %}
+<div class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+	{% if category != "compileError" %}
+	<div class="alert alert-{{category}} alert-dismissible fade show mt-4" role="alert">
+		{{message | safe}}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	{% endif %}
+{% endfor %}
+{% endif %}
+{% endwith %}
+</div>
 <div class="container-fluid row p-4">
 	<div class="col-4 p-4">
 		<div class="row mb-3">
@@ -154,19 +168,19 @@
 				<table class="table table-borderless table-sm">
 				<tbody>
 				<tr>
-					<th scope="row" class="table-width-30"> Date </th>
+					<th scope="row" style="width:50%;"> Date </th>
 					<td> {{event.date}} </td>
 				</tr>
 				<tr>
-					<th scope="row" class="table-width-30"> Organiser </th>
+					<th scope="row" style="width:50%;"> Organiser </th>
 					<td> <a class="priority-link" href="/org_profile/{{event.organiserid}}">{{event.organiser}}</a> </td>
 				</tr>
 				<tr>                                    
-					<th scope="row" class="table-width-30"> Type </th>
+					<th scope="row" style="width:50%;"> Type </th>
 					<td> {{event.type}} </td>
 				</tr>
 				<tr>                                    
-					<th scope="row" class="table-width-30"> Location </th>
+					<th scope="row" style="width:50%;"> Location </th>
 					<td> {{event.location}} </td>
 				</tr>
 				</tbody>
