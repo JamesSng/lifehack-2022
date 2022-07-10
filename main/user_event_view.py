@@ -7,16 +7,17 @@ def user_event(event):
     userinfo = awstools.getCurrentUserInfo()
     eventinfo = awstools.getEventInfo(event)
     eventinfo['numfriends'] = 0
+    
     organiserinfo = awstools.getOrganiserInfo(eventinfo['organiser'])
     participants = awstools.getVolunteersFromEvent(event)
     sort_participants = participants
     topfiveids = ai.suggest_similar(eventinfo['eventid'])[:5]
     topfive = []
     for eventid in topfiveids:
-        event = awstools.getEventInfo(eventid)
-        event['organiserid'] = event['organiser']
-        event['organiser'] = awstools.getOrganiserInfo(event['organiserid'])['name']
-        topfive.append(event)
+        event2 = awstools.getEventInfo(eventid)
+        event2['organiserid'] = event2['organiser']
+        event2['organiser'] = awstools.getOrganiserInfo(event2['organiserid'])['name']
+        topfive.append(event2)
 
     if userinfo != None and userinfo['usertype'] == 0:
         for friend in userinfo['friends']:
@@ -50,6 +51,7 @@ def user_event(event):
         info = awstools.getOrganiserInfo(event2['organiser'])
         event2['organiser'] = info['name']
     if request.method == 'POST':
+        result = request.form
         if 'create' in result:
             blogid = awstools.getNextBlogId()
             username = userinfo['username'] if userinfo['usertype'] == 0 else userinfo['organiserid']
