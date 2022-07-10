@@ -22,7 +22,11 @@ Visit [http://35.89.21.87/](http://35.89.21.87/) in a new browser tab/window. Yo
 
 You may register your own new Volunteer/Organiser accounts to test our features. Alternatively, you may use the following credentials:
 
-- Volunteer account: Username, Password
-- Organiser account: Username, Password
+- Volunteer account:
+  - Username: henry
+  - Password: pw218
+- Organiser account:
+  - Username: ffh
+  - Password: pw218
 
 Some parts of the site can also be accessed as an anonymous user.
